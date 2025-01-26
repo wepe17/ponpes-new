@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import axios from "axios";
-import { Santri } from "../types";
+import { Asatidz } from "../types";
 
-interface SantriState {
-  santri: Array<any>;
+interface AsatidzState {
+  asatidz: Array<any>;
   pagination: {
     total: number;
     currentPage: number;
@@ -12,36 +12,36 @@ interface SantriState {
   loading: boolean;
   error: string | null;
   success: boolean;
-  allSantri: (params: any) => Promise<void>;
-  addSantri: (data: Omit<Santri, "id">) => Promise<{ statusCode: number }>;
-  updateSantri: (
+  allAsatidz: (params: any) => Promise<void>;
+  addAsatidz: (data: Omit<Asatidz, "id">) => Promise<{ statusCode: number }>;
+  updateAsatidz: (
     id: string,
-    data: Omit<Santri, "id">,
+    data: Omit<Asatidz, "id">,
   ) => Promise<{ statusCode: number }>;
-  deleteSantri: (id: string) => Promise<void>;
+  deleteAsatidz: (id: string) => Promise<void>;
 }
 
-export const useSantriStore = create<SantriState>((set) => ({
+export const useAsatidzStore = create<AsatidzState>((set) => ({
   pagination: {
     total: 0,
     currentPage: 1,
     totalPages: 0,
   },
-  santri: [],
+  asatidz: [],
   loading: false,
   success: false,
   error: null,
-  allSantri: async (params: any) => {
+  allAsatidz: async (params: any) => {
     set({ loading: true });
     try {
       const { page = 1, limit = 10, search = "" } = params || {};
-      const resp = await axios.get("/api/santri", {
+      const resp = await axios.get("/api/asatidz", {
         params: { page, limit, search },
       });
       if (resp.status === 200) {
         const { data, total, page: currentPage, total_pages } = resp.data;
         set({
-          santri: data,
+          asatidz: data,
           pagination: {
             total,
             currentPage,
@@ -54,16 +54,16 @@ export const useSantriStore = create<SantriState>((set) => ({
       }
     } catch (error) {
       set({ loading: false, success: false });
-      // toast.error("Failed to fetch santri");
+      // toast.error("Failed to fetch asatidz");
       console.error(error);
     }
   },
-  addSantri: async (
-    data: Omit<Santri, "id">,
+  addAsatidz: async (
+    data: Omit<Asatidz, "id">,
   ): Promise<{ statusCode: number }> => {
     set({ loading: true, success: false });
     try {
-      const resp = await axios.post("/api/santri", data);
+      const resp = await axios.post("/api/asatidz", data);
       if (resp.status === 200) {
         set({ loading: false, success: true });
         return resp.data;
@@ -71,14 +71,14 @@ export const useSantriStore = create<SantriState>((set) => ({
       return { statusCode: resp.status };
     } catch (error) {
       set({ loading: false, success: false });
-      throw new Error("Failed to add santri");
+      throw new Error("Failed to add asatidz");
       return { statusCode: 400 };
     }
   },
-  updateSantri: async (id, data): Promise<{ statusCode: number }> => {
+  updateAsatidz: async (id, data): Promise<{ statusCode: number }> => {
     set({ loading: true });
     try {
-      const resp = await axios.put(`/api/santri/${id}`, data);
+      const resp = await axios.put(`/api/asatidz/${id}`, data);
       if (resp.status === 200) {
         set({ loading: false, success: true });
         return resp.data;
@@ -86,14 +86,14 @@ export const useSantriStore = create<SantriState>((set) => ({
       return { statusCode: resp.status };
     } catch (error) {
       set({ loading: false });
-      throw new Error("Failed to update santri");
+      throw new Error("Failed to update asatidz");
       return { statusCode: 400 };
     }
   },
-  deleteSantri: async (id) => {
+  deleteAsatidz: async (id) => {
     set({ loading: true });
     try {
-      const resp = await axios.delete(`/api/santri/${id}`);
+      const resp = await axios.delete(`/api/asatidz/${id}`);
       if (resp.status === 200) {
         set({ loading: false });
       } else {
@@ -101,7 +101,7 @@ export const useSantriStore = create<SantriState>((set) => ({
       }
     } catch (error) {
       set({ loading: false });
-      // toast.error("Failed to delete santri");
+      // toast.error("Failed to delete asatidz");
       console.error(error);
     }
   },

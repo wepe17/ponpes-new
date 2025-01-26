@@ -36,7 +36,7 @@ export interface Asatidz {
   subject: string;
   phone_number: string;
   address: string;
-  joinDate: string;
+  join_date: string;
   status: "active" | "inactive";
 }
 

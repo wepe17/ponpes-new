@@ -1,17 +1,17 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Asatidz } from '../../types';
+import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Asatidz } from "../../types";
 
 const schema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  nip: z.string().min(1, 'NIP is required'),
-  subject: z.string().min(1, 'Subject is required'),
-  phoneNumber: z.string().min(1, 'Phone number is required'),
-  address: z.string().min(1, 'Address is required'),
-  joinDate: z.string().min(1, 'Join date is required'),
-  status: z.enum(['active', 'inactive'])
+  name: z.string().min(1, "Name is required"),
+  nip: z.string().min(1, "NIP is required"),
+  subject: z.string().min(1, "Subject is required"),
+  phone_number: z.string().min(1, "Phone number is required"),
+  address: z.string().min(1, "Address is required"),
+  join_date: z.string().min(1, "Join date is required"),
+  status: z.enum(["active", "inactive"]),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -21,13 +21,13 @@ interface AsatidzFormProps {
   initialData?: Asatidz;
 }
 
-const FormField = ({ 
-  label, 
-  error, 
-  children 
-}: { 
-  label: string; 
-  error?: string; 
+const FormField = ({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
   children: React.ReactNode;
 }) => (
   <div className="space-y-1">
@@ -38,9 +38,13 @@ const FormField = ({
 );
 
 const AsatidzForm: React.FC<AsatidzFormProps> = ({ onSubmit, initialData }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: initialData
+    defaultValues: initialData,
   });
 
   return (
@@ -49,16 +53,16 @@ const AsatidzForm: React.FC<AsatidzFormProps> = ({ onSubmit, initialData }) => {
         <FormField label="Name" error={errors.name?.message}>
           <input
             type="text"
-            {...register('name')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("name")}
+            className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
 
         <FormField label="NIP" error={errors.nip?.message}>
           <input
             type="text"
-            {...register('nip')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("nip")}
+            className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
       </div>
@@ -67,41 +71,41 @@ const AsatidzForm: React.FC<AsatidzFormProps> = ({ onSubmit, initialData }) => {
         <FormField label="Subject" error={errors.subject?.message}>
           <input
             type="text"
-            {...register('subject')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("subject")}
+            className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
 
-        <FormField label="Join Date" error={errors.joinDate?.message}>
+        <FormField label="Join Date" error={errors.join_date?.message}>
           <input
             type="date"
-            {...register('joinDate')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("join_date")}
+            className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
       </div>
 
       <FormField label="Address" error={errors.address?.message}>
         <textarea
-          {...register('address')}
+          {...register("address")}
           rows={3}
-          className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+          className="w-full p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
         />
       </FormField>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField label="Phone Number" error={errors.phoneNumber?.message}>
+        <FormField label="Phone Number" error={errors.phone_number?.message}>
           <input
             type="tel"
-            {...register('phoneNumber')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("phone_number")}
+            className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
 
         <FormField label="Status" error={errors.status?.message}>
           <select
-            {...register('status')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("status")}
+            className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           >
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
@@ -122,3 +126,4 @@ const AsatidzForm: React.FC<AsatidzFormProps> = ({ onSubmit, initialData }) => {
 };
 
 export default AsatidzForm;
+
