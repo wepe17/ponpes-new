@@ -42,7 +42,7 @@ export interface Asatidz {
 
 export interface Payment {
   id: string;
-  santriId: string;
+  santri_id: string;
   amount: number;
   date: string;
   type: "SPP" | "Registration" | "Other";
@@ -57,4 +57,16 @@ export interface Transaction {
   type: "income" | "expense";
   category: string;
   description: string;
+}
+
+export interface Settings {
+  id: string;
+  school_name: string;
+  address: string;
+  phone_number: string;
+  email: string;
+  spp_amount: number;
+  registration_fee: number;
+  is_email_notification: number;
+  is_sms_notification: number;
 }

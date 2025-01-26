@@ -1,15 +1,15 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Transaction } from '../../types';
+import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Transaction } from "../../types";
 
 const schema = z.object({
-  date: z.string().min(1, 'Date is required'),
-  amount: z.number().min(1, 'Amount must be greater than 0'),
-  type: z.enum(['income', 'expense']),
-  category: z.string().min(1, 'Category is required'),
-  description: z.string().min(1, 'Description is required')
+  date: z.string().min(1, "Date is required"),
+  amount: z.number().min(1, "Amount must be greater than 0"),
+  type: z.enum(["income", "expense"]),
+  category: z.string().min(1, "Category is required"),
+  description: z.string().min(1, "Description is required"),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -19,13 +19,13 @@ interface TransactionFormProps {
   initialData?: Transaction;
 }
 
-const FormField = ({ 
-  label, 
-  error, 
-  children 
-}: { 
-  label: string; 
-  error?: string; 
+const FormField = ({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
   children: React.ReactNode;
 }) => (
   <div className="space-y-1">
@@ -35,13 +35,20 @@ const FormField = ({
   </div>
 );
 
-const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, initialData }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+const TransactionForm: React.FC<TransactionFormProps> = ({
+  onSubmit,
+  initialData,
+}) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       ...initialData,
-      amount: initialData?.amount || 0
-    }
+      amount: initialData?.amount || 0,
+    },
   });
 
   return (
@@ -50,16 +57,16 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, initialData
         <FormField label="Date" error={errors.date?.message}>
           <input
             type="date"
-            {...register('date')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("date")}
+            className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
 
         <FormField label="Amount" error={errors.amount?.message}>
           <input
             type="number"
-            {...register('amount', { valueAsNumber: true })}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("amount", { valueAsNumber: true })}
+            className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
       </div>
@@ -67,8 +74,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, initialData
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField label="Type" error={errors.type?.message}>
           <select
-            {...register('type')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("type")}
+            className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           >
             <option value="income">Income</option>
             <option value="expense">Expense</option>
@@ -78,17 +85,17 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, initialData
         <FormField label="Category" error={errors.category?.message}>
           <input
             type="text"
-            {...register('category')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("category")}
+            className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
       </div>
 
       <FormField label="Description" error={errors.description?.message}>
         <textarea
-          {...register('description')}
+          {...register("description")}
           rows={3}
-          className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+          className="w-full  p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
         />
       </FormField>
 
@@ -105,3 +112,4 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, initialData
 };
 
 export default TransactionForm;
+

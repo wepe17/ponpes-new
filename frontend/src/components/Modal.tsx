@@ -6,8 +6,10 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
-  isFooter: boolean;
-  onOk: () => void;
+  isFooter?: boolean;
+  onOk?: () => void;
+  width?: string; // Custom width (e.g., "w-96", "w-full")
+  height?: string; // Custom height (e.g., "h-auto", "h-96")
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -15,8 +17,10 @@ const Modal: React.FC<ModalProps> = ({
   onClose,
   title,
   children,
-  isFooter,
+  isFooter = false,
   onOk,
+  width = "w-[599px]", // Default width
+  height = "h-auto", // Default height
 }) => {
   useEffect(() => {
     if (isOpen) {
@@ -34,12 +38,16 @@ const Modal: React.FC<ModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+        {/* Background Overlay */}
         <div
           className="fixed inset-0 bg-black bg-opacity-30 transition-opacity"
           onClick={onClose}
         />
 
-        <div className="relative inline-block w-full max-w-md p-6 my-8 text-left bg-white rounded-lg shadow-xl transform transition-all sm:max-w-lg">
+        <div
+          className={`relative inline-block ${width} ${height} p-6 my-8 text-left bg-white rounded-lg shadow-xl transform transition-all`}
+        >
+          {/* Header */}
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg sm:text-xl font-medium text-gray-900">
               {title}
@@ -52,7 +60,10 @@ const Modal: React.FC<ModalProps> = ({
             </button>
           </div>
 
+          {/* Body */}
           <div className="mt-2">{children}</div>
+
+          {/* Footer */}
           {isFooter && (
             <div className="flex justify-end pt-4">
               <button
@@ -71,4 +82,3 @@ const Modal: React.FC<ModalProps> = ({
 };
 
 export default Modal;
-
