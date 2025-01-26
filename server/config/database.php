@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'host' => $_ENV['DB_HOST'] ?? 'localhost',
+    'host' => $_ENV['DB_HOST'] ?? 'mysql',
     'username' => $_ENV['DB_USER'] ?? 'bijhoo-dev',
     'password' => $_ENV['DB_PASSWORD'] ?? 'bijhoo_dev',
     'database' => $_ENV['DB_NAME'] ?? 'ponpes-db',
