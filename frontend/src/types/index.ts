@@ -1,7 +1,7 @@
 export interface User {
-  id: string;
+  id?: string;
   username: string;
-  role: 'admin' | 'staff';
+  role: "admin" | "staff";
   name: string;
 }
 
@@ -9,22 +9,22 @@ export interface Santri {
   id: string;
   name: string;
   nis: string;
-  dateOfBirth: string;
+  date_of_birth: string;
   address: string;
-  parentName: string;
-  phoneNumber: string;
-  enrollmentDate: string;
+  parent_name: string;
+  phone_number: string;
+  enrollment_date: string;
   class: string;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
 }
 
 export interface Alumni {
   id: string;
   name: string;
   nis: string;
-  graduationYear: string;
+  graduation_year: string;
   address: string;
-  phoneNumber: string;
+  phone_number: string;
   occupation: string;
   email: string;
 }
@@ -34,10 +34,10 @@ export interface Asatidz {
   name: string;
   nip: string;
   subject: string;
-  phoneNumber: string;
+  phone_number: string;
   address: string;
   joinDate: string;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
 }
 
 export interface Payment {
@@ -45,8 +45,8 @@ export interface Payment {
   santriId: string;
   amount: number;
   date: string;
-  type: 'SPP' | 'Registration' | 'Other';
-  status: 'paid' | 'pending';
+  type: "SPP" | "Registration" | "Other";
+  status: "paid" | "pending";
   description?: string;
 }
 
@@ -54,7 +54,7 @@ export interface Transaction {
   id: string;
   date: string;
   amount: number;
-  type: 'income' | 'expense';
+  type: "income" | "expense";
   category: string;
   description: string;
 }

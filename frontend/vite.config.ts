@@ -1,10 +1,28 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig, loadEnv } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
+process.env = {
+  ...process.env,
+  ...loadEnv(process.env.NODE_ENV, process.cwd()),
+};
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    exclude: ['lucide-react'],
+    exclude: ["lucide-react"],
+  },
+  server: {
+    host: true,
+    port: Number(process.env?.VITE_DEVELOPMENT_PORT || 5173),
+    hmr: process.env.NODE_ENV !== "production",
+    proxy: {
+      "/api": {
+        target: "http://localhost:32771/ponpes-be/public/api",
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+    cors: false,
   },
 });

@@ -1,19 +1,19 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Santri } from '../../types';
+import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Santri } from "../../types";
 
 const schema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  nis: z.string().min(1, 'NIS is required'),
-  dateOfBirth: z.string().min(1, 'Date of birth is required'),
-  address: z.string().min(1, 'Address is required'),
-  parentName: z.string().min(1, 'Parent name is required'),
-  phoneNumber: z.string().min(1, 'Phone number is required'),
-  enrollmentDate: z.string().min(1, 'Enrollment date is required'),
-  class: z.string().min(1, 'Class is required'),
-  status: z.enum(['active', 'inactive'])
+  name: z.string().min(1, "Name is required"),
+  nis: z.string().min(1, "NIS is required"),
+  date_of_birth: z.string().min(1, "Date of birth is required"),
+  address: z.string().min(1, "Address is required"),
+  parent_name: z.string().min(1, "Parent name is required"),
+  phone_number: z.string().min(1, "Phone number is required"),
+  enrollment_date: z.string().min(1, "Enrollment date is required"),
+  class: z.string().min(1, "Class is required"),
+  status: z.enum(["active", "inactive"]),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -23,13 +23,13 @@ interface SantriFormProps {
   initialData?: Santri;
 }
 
-const FormField = ({ 
-  label, 
-  error, 
-  children 
-}: { 
-  label: string; 
-  error?: string; 
+const FormField = ({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
   children: React.ReactNode;
 }) => (
   <div className="space-y-1">
@@ -40,9 +40,13 @@ const FormField = ({
 );
 
 const SantriForm: React.FC<SantriFormProps> = ({ onSubmit, initialData }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: initialData
+    defaultValues: initialData,
   });
 
   return (
@@ -51,60 +55,63 @@ const SantriForm: React.FC<SantriFormProps> = ({ onSubmit, initialData }) => {
         <FormField label="Name" error={errors.name?.message}>
           <input
             type="text"
-            {...register('name')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("name")}
+            className="w-full border h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
 
         <FormField label="NIS" error={errors.nis?.message}>
           <input
             type="text"
-            {...register('nis')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("nis")}
+            className="w-full border h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField label="Date of Birth" error={errors.dateOfBirth?.message}>
+        <FormField label="Date of Birth" error={errors.date_of_birth?.message}>
           <input
             type="date"
-            {...register('dateOfBirth')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("date_of_birth")}
+            className="w-full border h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
 
-        <FormField label="Enrollment Date" error={errors.enrollmentDate?.message}>
+        <FormField
+          label="Enrollment Date"
+          error={errors.enrollment_date?.message}
+        >
           <input
             type="date"
-            {...register('enrollmentDate')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("enrollment_date")}
+            className="w-full border h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
       </div>
 
       <FormField label="Address" error={errors.address?.message}>
         <textarea
-          {...register('address')}
+          {...register("address")}
           rows={3}
-          className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+          className="w-full border p-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
         />
       </FormField>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField label="Parent Name" error={errors.parentName?.message}>
+        <FormField label="Parent Name" error={errors.parent_name?.message}>
           <input
             type="text"
-            {...register('parentName')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("parent_name")}
+            className="w-full border h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
 
-        <FormField label="Phone Number" error={errors.phoneNumber?.message}>
+        <FormField label="Phone Number" error={errors.phone_number?.message}>
           <input
             type="tel"
-            {...register('phoneNumber')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("phone_number")}
+            className="w-full border h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
       </div>
@@ -113,15 +120,15 @@ const SantriForm: React.FC<SantriFormProps> = ({ onSubmit, initialData }) => {
         <FormField label="Class" error={errors.class?.message}>
           <input
             type="text"
-            {...register('class')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("class")}
+            className="w-full border h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
 
         <FormField label="Status" error={errors.status?.message}>
           <select
-            {...register('status')}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            {...register("status")}
+            className="w-full border h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           >
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
@@ -142,3 +149,4 @@ const SantriForm: React.FC<SantriFormProps> = ({ onSubmit, initialData }) => {
 };
 
 export default SantriForm;
+

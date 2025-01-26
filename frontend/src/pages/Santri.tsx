@@ -1,48 +1,92 @@
-import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Search } from 'lucide-react';
-import { Santri } from '../types';
-import { useDatabase } from '../store/database';
-import Modal from '../components/Modal';
-import SantriForm from '../components/forms/SantriForm';
+import React, { useEffect, useState } from "react";
+import { Plus, Edit, Trash2, Search } from "lucide-react";
+import { Santri } from "../types";
+import Modal from "../components/Modal";
+import SantriForm from "../components/forms/SantriForm";
+import { useSantriStore } from "../store/santri";
+import { useToast } from "../hooks/useToast";
+import { sleep } from "../utils";
+import Pagination from "../components/Pagination";
 
 const SantriPage = () => {
-  const { santri, addSantri, updateSantri, deleteSantri } = useDatabase();
+  const {
+    santri,
+    addSantri,
+    updateSantri,
+    deleteSantri,
+    allSantri,
+    success,
+    pagination,
+  } = useSantriStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSantri, setSelectedSantri] = useState<Santri | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const { showToast, ToastComponent } = useToast();
+  const [entry, setEntry] = useState<"add" | "update" | "delete">("add");
+  // const isDelete ;
 
   const handleAdd = () => {
+    setEntry("add");
     setSelectedSantri(null);
     setIsModalOpen(true);
   };
 
   const handleEdit = (santri: Santri) => {
+    setEntry("update");
+    setSelectedSantri(santri);
+
+    console.log("update santri", selectedSantri);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = (santri: Santri) => {
+    setEntry("delete");
     setSelectedSantri(santri);
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this santri?')) {
-      deleteSantri(id);
-    }
-  };
-
-  const handleSubmit = (data: Omit<Santri, 'id'>) => {
+  const handleSubmit = async (data: Omit<Santri, "id">) => {
     if (selectedSantri) {
-      updateSantri(selectedSantri.id, data);
+      const resp = await updateSantri(selectedSantri.id, data);
+      if (resp.statusCode === 200) {
+        await allSantri({ ...pagination });
+        showToast("Santri updated successfully", "success");
+      }
     } else {
-      addSantri(data);
+      const resp = await addSantri(data);
+      console.log("resp", resp);
+      if (resp.statusCode === 201) {
+        await allSantri({ ...pagination });
+        showToast("Santri added successfully", "success");
+      }
     }
+
     setIsModalOpen(false);
   };
 
-  const filteredSantri = santri.filter(s => 
-    s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    s.nis.includes(searchTerm)
+  const filteredSantri = (santri || []).filter(
+    (s) =>
+      s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.nis.includes(searchTerm),
   );
+
+  const handleOk = async () => {
+    if (selectedSantri) {
+      await sleep(1000);
+      await deleteSantri(selectedSantri.id);
+      setIsModalOpen(false);
+      showToast("Santri deleted successfully", "success");
+      await allSantri({ ...pagination });
+    }
+  };
+
+  useEffect(() => {
+    allSantri({});
+  }, [allSantri]);
 
   return (
     <div>
+      <ToastComponent />
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Data Santri</h1>
         <button
@@ -70,11 +114,21 @@ const SantriPage = () => {
           <table className="min-w-full">
             <thead>
               <tr className="bg-gray-50">
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIS</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Class</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  NIS
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Class
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -84,9 +138,13 @@ const SantriPage = () => {
                   <td className="px-6 py-4 whitespace-nowrap">{s.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{s.class}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      s.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                    }`}>
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        s.status === "active"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
                       {s.status}
                     </span>
                   </td>
@@ -98,7 +156,7 @@ const SantriPage = () => {
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => handleDelete(s.id)}
+                      onClick={() => handleDelete(s)}
                       className="text-red-600 hover:text-red-900"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -109,17 +167,38 @@ const SantriPage = () => {
             </tbody>
           </table>
         </div>
+        <div>
+          <Pagination
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages || 1}
+            onPageChange={(page) => allSantri({ page })}
+          />
+        </div>
       </div>
 
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={selectedSantri ? 'Edit Santri' : 'Add New Santri'}
+        title={
+          (entry === "delete" && "Delete Santri") ||
+          (entry === "update" && "Edit Santri") ||
+          "Add New Santri"
+        }
+        onOk={handleOk}
+        isFooter={entry === "delete"}
       >
-        <SantriForm
-          onSubmit={handleSubmit}
-          initialData={selectedSantri || undefined}
-        />
+        {["add", "update"].includes(entry) && (
+          <SantriForm
+            onSubmit={handleSubmit}
+            initialData={selectedSantri || undefined}
+          />
+        )}
+        {entry === "delete" && (
+          <div className="">
+            Are you sure you want to delete santri <b>{selectedSantri?.name}</b>{" "}
+            ?{" "}
+          </div>
+        )}
       </Modal>
     </div>
   );

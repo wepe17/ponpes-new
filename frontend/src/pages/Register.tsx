@@ -4,26 +4,28 @@ import { useForm } from "react-hook-form";
 import { useAuthStore } from "../store/auth";
 import { School } from "lucide-react";
 
-interface LoginForm {
+interface RegisterForm {
   username: string;
+  name: string;
+  role: "admin" | "staff";
   password: string;
 }
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
-  const login = useAuthStore((state) => state.login);
+  const registration = useAuthStore((state) => state.register);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginForm>();
+  } = useForm<RegisterForm>();
 
-  const onSubmit = async (data: LoginForm) => {
+  const onSubmit = async (data: RegisterForm) => {
     try {
-      await login(data.username, data.password);
-      navigate("/santri");
+      await registration(data);
+      navigate("/login");
     } catch (error) {
-      alert("Login failed. Please check your credentials.");
+      alert("Register failed. Please check your credentials.");
     }
   };
 
@@ -35,9 +37,24 @@ const Login = () => {
           <h1 className="text-2xl font-bold mt-4">
             Pesantren Management System
           </h1>
-          <p className="text-gray-600 mt-2">Please login to continue</p>
+          <p className="text-gray-600 mt-2">Please Register to continue</p>
         </div>
+
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Fullname
+            </label>
+            <input
+              type="text"
+              {...register("name", { required: "name is required" })}
+              className="mt-1 p-2 h-10 block w-full rounded-md border shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            )}
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Username
@@ -45,7 +62,7 @@ const Login = () => {
             <input
               type="text"
               {...register("username", { required: "Username is required" })}
-              className="mt-1 p-2 block h-10 w-full rounded-md border shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+              className="mt-1 p-2 h-10 block w-full rounded-md border shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
             />
             {errors.username && (
               <p className="text-red-500 text-sm mt-1">
@@ -56,12 +73,28 @@ const Login = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
+              Role
+            </label>
+            <select
+              {...register("role", { required: "Role is required" })}
+              className="mt-1 p-2 h-10 block w-full rounded-md border shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            >
+              <option value="admin">Admin</option>
+              <option value="staff">Staff</option>
+            </select>
+            {errors.role && (
+              <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
               Password
             </label>
             <input
               type="password"
               {...register("password", { required: "Password is required" })}
-              className="mt-1 p-2 block h-10 w-full rounded-md border shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+              className="mt-1 p-2 h-10 block w-full rounded-md border shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">
@@ -74,13 +107,14 @@ const Login = () => {
             type="submit"
             className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
           >
-            Login
+            Register
           </button>
         </form>
+
         <div className="text-center mt-4">
-          don't have an account?{" "}
-          <Link to="/registration" className="text-green-600">
-            Register
+          already have an account?{" "}
+          <Link to="/login" className="text-green-600">
+            Login
           </Link>
         </div>
       </div>
@@ -88,4 +122,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
