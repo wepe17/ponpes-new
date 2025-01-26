@@ -17,7 +17,8 @@ export default defineConfig({
     hmr: process.env.NODE_ENV !== "production",
     proxy: {
       "/api": {
-        target: "http://localhost:32771/ponpes-be/public/api",
+        // using env variable later
+        target: "http://localhost:32771/ponpes-be/public",
         changeOrigin: true,
         secure: true,
         rewrite: (path) => path.replace(/^\/api/, ""),

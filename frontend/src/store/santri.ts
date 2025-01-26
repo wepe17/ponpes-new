@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import axios from "axios";
 import { Santri } from "../types";
+import apiClient from "../config/axios";
 
 interface SantriState {
   santri: Array<any>;
@@ -35,7 +35,7 @@ export const useSantriStore = create<SantriState>((set) => ({
     set({ loading: true });
     try {
       const { page = 1, limit = 10, search = "" } = params || {};
-      const resp = await axios.get("/api/santri", {
+      const resp = await apiClient.get("/api/santri", {
         params: { page, limit, search },
       });
       if (resp.status === 200) {
@@ -54,7 +54,6 @@ export const useSantriStore = create<SantriState>((set) => ({
       }
     } catch (error) {
       set({ loading: false, success: false });
-      // toast.error("Failed to fetch santri");
       console.error(error);
     }
   },
@@ -63,7 +62,7 @@ export const useSantriStore = create<SantriState>((set) => ({
   ): Promise<{ statusCode: number }> => {
     set({ loading: true, success: false });
     try {
-      const resp = await axios.post("/api/santri", data);
+      const resp = await apiClient.post("/api/santri", data);
       if (resp.status === 200) {
         set({ loading: false, success: true });
         return resp.data;
@@ -78,7 +77,7 @@ export const useSantriStore = create<SantriState>((set) => ({
   updateSantri: async (id, data): Promise<{ statusCode: number }> => {
     set({ loading: true });
     try {
-      const resp = await axios.put(`/api/santri/${id}`, data);
+      const resp = await apiClient.put(`/api/santri/${id}`, data);
       if (resp.status === 200) {
         set({ loading: false, success: true });
         return resp.data;
@@ -93,7 +92,7 @@ export const useSantriStore = create<SantriState>((set) => ({
   deleteSantri: async (id) => {
     set({ loading: true });
     try {
-      const resp = await axios.delete(`/api/santri/${id}`);
+      const resp = await apiClient.delete(`/api/santri/${id}`);
       if (resp.status === 200) {
         set({ loading: false });
       } else {

@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import axios from "axios";
 import { Asatidz } from "../types";
+import apiClient from "../config/axios";
 
 interface AsatidzState {
   asatidz: Array<any>;
@@ -35,7 +35,7 @@ export const useAsatidzStore = create<AsatidzState>((set) => ({
     set({ loading: true });
     try {
       const { page = 1, limit = 10, search = "" } = params || {};
-      const resp = await axios.get("/api/asatidz", {
+      const resp = await apiClient.get("/api/asatidz", {
         params: { page, limit, search },
       });
       if (resp.status === 200) {
@@ -63,7 +63,7 @@ export const useAsatidzStore = create<AsatidzState>((set) => ({
   ): Promise<{ statusCode: number }> => {
     set({ loading: true, success: false });
     try {
-      const resp = await axios.post("/api/asatidz", data);
+      const resp = await apiClient.post("/api/asatidz", data);
       if (resp.status === 200) {
         set({ loading: false, success: true });
         return resp.data;
@@ -78,7 +78,7 @@ export const useAsatidzStore = create<AsatidzState>((set) => ({
   updateAsatidz: async (id, data): Promise<{ statusCode: number }> => {
     set({ loading: true });
     try {
-      const resp = await axios.put(`/api/asatidz/${id}`, data);
+      const resp = await apiClient.put(`/api/asatidz/${id}`, data);
       if (resp.status === 200) {
         set({ loading: false, success: true });
         return resp.data;
@@ -93,7 +93,7 @@ export const useAsatidzStore = create<AsatidzState>((set) => ({
   deleteAsatidz: async (id) => {
     set({ loading: true });
     try {
-      const resp = await axios.delete(`/api/asatidz/${id}`);
+      const resp = await apiClient.delete(`/api/asatidz/${id}`);
       if (resp.status === 200) {
         set({ loading: false });
       } else {

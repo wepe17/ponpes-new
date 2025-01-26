@@ -1,30 +1,30 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { User } from '../../types';
+import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { User } from "../../types";
 
 const schema = z.object({
-  username: z.string().min(1, 'Username is required'),
-  name: z.string().min(1, 'Name is required'),
-  role: z.enum(['admin', 'staff']),
-  password: z.string().min(6, 'Password must be at least 6 characters')
+  username: z.string().min(1, "Username is required"),
+  name: z.string().min(1, "Name is required"),
+  role: z.enum(["admin", "staff"]),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 type FormData = z.infer<typeof schema>;
 
 interface UserFormProps {
   onSubmit: (data: FormData) => void;
-  initialData?: Omit<User, 'id'>;
+  initialData?: Omit<User, "id">;
 }
 
-const FormField = ({ 
-  label, 
-  error, 
-  children 
-}: { 
-  label: string; 
-  error?: string; 
+const FormField = ({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
   children: React.ReactNode;
 }) => (
   <div className="space-y-1">
@@ -35,9 +35,13 @@ const FormField = ({
 );
 
 const UserForm: React.FC<UserFormProps> = ({ onSubmit, initialData }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: initialData
+    defaultValues: initialData,
   });
 
   return (
@@ -45,36 +49,38 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, initialData }) => {
       <FormField label="Username" error={errors.username?.message}>
         <input
           type="text"
-          {...register('username')}
-          className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+          {...register("username")}
+          className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
         />
       </FormField>
 
       <FormField label="Name" error={errors.name?.message}>
         <input
           type="text"
-          {...register('name')}
-          className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+          {...register("name")}
+          className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
         />
       </FormField>
 
       <FormField label="Role" error={errors.role?.message}>
         <select
-          {...register('role')}
-          className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+          {...register("role")}
+          className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
         >
           <option value="admin">Admin</option>
           <option value="staff">Staff</option>
         </select>
       </FormField>
 
-      <FormField label="Password" error={errors.password?.message}>
-        <input
-          type="password"
-          {...register('password')}
-          className="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
-        />
-      </FormField>
+      {!initialData && (
+        <FormField label="Password" error={errors.password?.message}>
+          <input
+            type="password"
+            {...register("password")}
+            className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+          />
+        </FormField>
+      )}
 
       <div className="flex justify-end pt-4">
         <button
@@ -89,3 +95,4 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, initialData }) => {
 };
 
 export default UserForm;
+
