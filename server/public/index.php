@@ -4,6 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Controllers\SantriController;
 use App\Controllers\AsatidzController;
+use App\Controllers\SettingsController;
 use App\Controllers\UsersController;
 use App\Controllers\PaymentsController;
 use App\Controllers\TransactionsController;
@@ -11,8 +12,8 @@ use App\Controllers\AlumniController;
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 
 // Handle OPTIONS requests for CORS preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -69,6 +70,13 @@ try {
                 echo json_encode($result);
                 exit;
             }
+
+            if ($uri[2] === 'add') {
+                $data = json_decode(file_get_contents('php://input'), true);
+                $result = $controller->store($data);
+                echo json_encode($result);
+                exit;
+            }
             break;
         case 'payments':
             $controller = new PaymentsController();
@@ -78,6 +86,9 @@ try {
             break;
         case 'alumni':
             $controller = new AlumniController();
+            break;
+        case 'settings':
+            $controller = new SettingsController();
             break;
         default:
             http_response_code(404);

@@ -48,3 +48,20 @@ CREATE TABLE IF NOT EXISTS transactions (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS settings (
+    id VARCHAR(36) PRIMARY KEY,
+    -- general
+    school_name VARCHAR(100) NOT NULL,
+    address TEXT NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    -- payment
+    spp_amount DECIMAL(10, 2) NOT NULL,
+    registration_fee DECIMAL(10, 2) NOT NULL,
+    -- system notification
+    is_email_notification TINYINT(1) NOT NULL DEFAULT 0,
+    is_sms_notification TINYINT(1) NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

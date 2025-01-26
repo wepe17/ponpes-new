@@ -11,10 +11,14 @@ use PDO;
 class UsersController
 {
     private PDO $db;
+    private $jwtSecret = 'very-secret';
+
 
     public function __construct()
     {
         $this->db = Database::getInstance();
+        // $this->jwtSecret = getenv('JWT_SECRET') || 'verysecret';
+        // $this->secretKey = getenv('JWT_SECRET') || 'verysecret';
     }
 
     public function register($data)
@@ -40,7 +44,6 @@ class UsersController
 
     public function login($credentials)
     {
-        // Validate input
         if (!isset($credentials['username']) || !isset($credentials['password'])) {
             throw new Exception('Username and password are required');
         }
@@ -67,10 +70,37 @@ class UsersController
         ];
     }
 
-    public function index()
+    public function index($search = '', $page = 1, $limit = 10)
     {
-        $stmt = $this->db->query('SELECT id, username, name, role FROM users ORDER BY created_at DESC');
-        return $stmt->fetchAll();
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+        $offset = ($page - 1) * $limit;
+
+        $searchQuery = $search ? "WHERE name LIKE ?" : "";
+        $searchParam = $search ? ["%{$search}%"] : [];
+
+        $countQuery = "SELECT COUNT(*) as total FROM users {$searchQuery}";
+        $countStmt = $this->db->prepare($countQuery);
+        $countStmt->execute($searchParam);
+        $total = $countStmt->fetch()['total'];
+
+        $query = "SELECT * FROM users {$searchQuery} ORDER BY created_at DESC LIMIT ? OFFSET ?";
+        $stmt = $this->db->prepare($query);
+
+
+        $params = [...$searchParam, $limit, $offset];
+        $stmt->execute($params);
+        $data = $stmt->fetchAll();
+
+        return [
+            'data' => $data,
+            'total' => $total,
+            'page' => $page,
+            'limit' => $limit,
+            'statusCode' => 200,
+            'total_pages' => ceil($total / $limit)
+        ];
+
     }
 
     public function show($id)
@@ -82,9 +112,28 @@ class UsersController
 
     public function store($data)
     {
-        $sql = 'INSERT INTO users (id, username, password, name, role) 
-                VALUES (UUID(), ?, ?, ?, ?)';
+        $headers = getallheaders();
+        $token = isset($headers['Authorization']) ? trim(str_replace('Bearer', '', $headers['Authorization'])) : null;
 
+        if (!$token) {
+            return ['error' => 'Authorization token missing', 'statusCode' => 401];
+        }
+
+        $currentUser = null;
+        if ($token) {
+            try {
+                $currentUser = $this->authenticate($token);
+            } catch (Exception $e) {
+                return ['error' => $e->getMessage(), 'statusCode' => 401];
+            }
+        }
+
+        if (isset($data['role']) && (!$currentUser || $currentUser['role'] !== 'admin')) {
+            return ['error' => 'Unauthorized access', 'statusCode' => 401];
+        }
+
+        $sql = 'INSERT INTO users (id, username, password, name, role) 
+            VALUES (UUID(), ?, ?, ?, ?)';
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             $data['username'],
@@ -93,22 +142,36 @@ class UsersController
             $data['role'],
         ]);
 
-        return $this->show($this->db->lastInsertId());
+        return [
+            'data' => $this->show($this->db->lastInsertId()),
+            'statusCode' => 201,
+        ];
     }
 
     public function update($id, $data)
     {
+        $headers = getallheaders();
+        $token = isset($headers['Authorization']) ? trim(str_replace('Bearer', '', $headers['Authorization'])) : null;
+
+        $currentUser = null;
+        if ($token) {
+            try {
+                $currentUser = $this->authenticate($token);
+            } catch (Exception $e) {
+                return ['error' => $e->getMessage(), 'statusCode' => 401];
+            }
+        }
+
+        if (isset($data['role']) && (!$currentUser || $currentUser['role'] !== 'admin')) {
+            return ['error' => 'Unauthorized access', 'statusCode' => 401];
+        }
+
         $fields = [];
         $values = [];
 
         if (isset($data['username'])) {
             $fields[] = 'username = ?';
             $values[] = $data['username'];
-        }
-
-        if (isset($data['password'])) {
-            $fields[] = 'password = ?';
-            $values[] = password_hash($data['password'], PASSWORD_DEFAULT);
         }
 
         if (isset($data['name'])) {
@@ -122,12 +185,10 @@ class UsersController
         }
 
         $values[] = $id;
-
         $sql = 'UPDATE users SET ' . implode(', ', $fields) . ' WHERE id = ?';
         $stmt = $this->db->prepare($sql);
         $stmt->execute($values);
-
-        return $this->show($id);
+        return ['data' => $this->show($id), 'statusCode' => 200, 'msg' => 'Data berhasil diupdate'];
     }
 
     public function destroy($id)
@@ -142,16 +203,25 @@ class UsersController
         $expirationTime = $issuedAt + 36000; // Valid for 1 hour
 
         $payload = [
-          'iat' => $issuedAt,
-          'exp' => $expirationTime,
-          'sub' => $user['id'],
-          'username' => $user['username'],
-          'role' => $user['role']
+            'iat' => $issuedAt,
+            'exp' => $expirationTime,
+            'sub' => $user['id'],
+            'username' => $user['username'],
+            'role' => $user['role']
         ];
 
-        $secret = (string)$this->jwtSecret;
+        $secret = (string) $this->jwtSecret;
 
-        return JWT::encode($payload, $secret, 'HS256');
+        if (empty($secret)) {
+            throw new \Exception('JWT secret is not set.');
+        }
+
+        try {
+            return JWT::encode($payload, $secret, 'HS256');
+        } catch (\Exception $e) {
+            // Tangani error encoding
+            throw new \Exception('Failed to generate JWT token: ' . $e->getMessage());
+        }
     }
 
     public function validateToken($token)
@@ -164,13 +234,11 @@ class UsersController
         }
     }
 
-    // Middleware-like method to check authentication
     public function authenticate($token)
     {
         try {
             $decoded = $this->validateToken($token);
 
-            // Fetch user to ensure they still exist
             $stmt = $this->db->prepare('SELECT id, username, role FROM users WHERE id = ?');
             $stmt->execute([$decoded->sub]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
