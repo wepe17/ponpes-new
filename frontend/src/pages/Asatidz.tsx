@@ -6,6 +6,7 @@ import Modal from "../components/Modal";
 import AsatidzForm from "../components/forms/AsatidzForm";
 import { useToast } from "../hooks/useToast";
 import { sleep } from "../utils";
+import { exportToExcel } from "../config/excel";
 
 const AsatidzPage = () => {
   const {
@@ -73,6 +74,16 @@ const AsatidzPage = () => {
     }
   };
 
+  const exportExcel = () => {
+    const data = asatidz.map((s) => ({
+      NIP: s.nip,
+      Name: s.name,
+      Subject: s.subject,
+      Status: s.status,
+    }));
+    exportToExcel(data, "data-asatidz.xlsx");
+  };
+
   useEffect(() => {
     allAsatidz({});
   }, [allAsatidz]);
@@ -82,13 +93,21 @@ const AsatidzPage = () => {
       <ToastComponent />
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Data Asatidz</h1>
-        <button
-          onClick={handleAdd}
-          className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Add New Asatidz
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleAdd}
+            className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add New Asatidz
+          </button>
+          <button
+            onClick={exportExcel}
+            className="px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            Export Excel
+          </button>
+        </div>
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6">
@@ -183,4 +202,3 @@ const AsatidzPage = () => {
 };
 
 export default AsatidzPage;
-

@@ -8,6 +8,7 @@ import { useAuthStore } from "../store/auth";
 import { useToast } from "../hooks/useToast";
 import { sleep } from "../utils";
 import Pagination from "../components/Pagination";
+import { exportToExcel } from "../config/excel";
 
 const PengurusPage = () => {
   const { users, addUser, allUsers, updateUser, deleteUser, pagination } =
@@ -79,6 +80,15 @@ const PengurusPage = () => {
     }
   };
 
+  const exportExcel = () => {
+    const data = users.map((s) => ({
+      Username: s.username,
+      Name: s.name,
+      Position: s.role,
+    }));
+    exportToExcel(data, "data-pengurus.xlsx");
+  };
+
   useEffect(() => {
     allUsers({});
   }, [allUsers]);
@@ -88,13 +98,21 @@ const PengurusPage = () => {
       <ToastComponent />
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Data Pengurus</h1>
-        <button
-          onClick={handleAdd}
-          className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Add New User
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleAdd}
+            className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add New Pengurus
+          </button>
+          <button
+            onClick={exportExcel}
+            className="px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            Export Excel
+          </button>
+        </div>
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6">

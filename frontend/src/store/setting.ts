@@ -9,6 +9,9 @@ interface SettingState {
   success: boolean;
   allSetting: (params: any) => Promise<void>;
   updateSetting: (data: Settings) => Promise<{ statusCode: number }>;
+  updateKasSetting: (
+    data: Pick<Settings, "kas_amount" | "kas_date" | "kas_description">,
+  ) => Promise<{ statusCode: number }>;
 }
 
 export const useSettingStore = create<SettingState>((set) => ({
@@ -43,6 +46,21 @@ export const useSettingStore = create<SettingState>((set) => ({
         return resp.data;
       }
       return { statusCode: resp.status };
+    } catch (error) {
+      set({ loading: false });
+      throw new Error("Failed to update setting");
+      return { statusCode: 400 };
+    }
+  },
+  updateKasSetting: async (data): Promise<{ statusCode: number }> => {
+    set({ loading: true });
+    try {
+      const resp = await apiClient.post(`/api/settings/transaction`, data);
+      // if (resp.status === 200) {
+      set({ loading: false, success: true });
+      return resp.data;
+      // }
+      // return { statusCode: resp.status };
     } catch (error) {
       set({ loading: false });
       throw new Error("Failed to update setting");

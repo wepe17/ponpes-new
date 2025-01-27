@@ -10,6 +10,7 @@ import Keuangan from "./pages/Keuangan";
 import Pengaturan from "./pages/Pengaturan";
 import Alumni from "./pages/Alumni";
 import { getLocalStorage } from "./config/local-storage";
+import ReportPage from "./pages/Report";
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -77,6 +78,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Pengaturan />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/report"
+          element={
+            <ProtectedRoute>
+              <ReportPage />
             </ProtectedRoute>
           }
         />

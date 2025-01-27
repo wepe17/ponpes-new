@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Menu,
   X,
+  RepeatIcon,
 } from "lucide-react";
 import { getLocalStorage } from "../config/local-storage";
 
@@ -97,6 +98,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <NavLink to="/pengaturan" icon={Settings}>
             Pengaturan
           </NavLink>
+          <NavLink to="/report" icon={RepeatIcon}>
+            Report
+          </NavLink>
         </nav>
         <div className="absolute bottom-0 w-full p-4 border-t">
           <button
@@ -135,4 +139,3 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 export default Layout;
-

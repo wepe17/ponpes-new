@@ -6,14 +6,20 @@ import {
   Search,
   Edit,
   Trash2,
+  Wallet,
+  Download,
 } from "lucide-react";
-import { Transaction } from "../types";
+import { Settings, Transaction } from "../types";
 import Modal from "../components/Modal";
 import TransactionForm from "../components/forms/TransactionForm";
 import { useTransactionStore } from "../store/transaction";
 import { useToast } from "../hooks/useToast";
 import Pagination from "../components/Pagination";
-import { sleep } from "../utils";
+import { formatToIDR, sleep } from "../utils";
+import { useSettingStore } from "../store/setting";
+import { exportToExcel } from "../config/excel";
+
+type KasPayload = Pick<Settings, "kas_amount" | "kas_date" | "kas_description">;
 
 const KeuanganPage = () => {
   const {
@@ -24,12 +30,19 @@ const KeuanganPage = () => {
     allTransaction,
     pagination,
   } = useTransactionStore();
+  const { updateKasSetting, allSetting, setting } = useSettingStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalKasOpen, setIsModalKasOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const { showToast, ToastComponent } = useToast();
   const [entry, setEntry] = useState<"add" | "update" | "delete">("add");
+  const [kasPayload, setKasPayload] = useState<KasPayload>({
+    kas_amount: 0,
+    kas_date: "",
+    kas_description: "",
+  });
 
   const handleAdd = () => {
     setEntry("add");
@@ -65,6 +78,7 @@ const KeuanganPage = () => {
       }
     }
 
+    allSetting({});
     setIsModalOpen(false);
   };
 
@@ -73,68 +87,137 @@ const KeuanganPage = () => {
       t?.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       t?.category.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+  const { totalIncome, totalExpense } = (transaction || []).reduce(
+    (totals, t) => {
+      if (t.type === "income") {
+        totals.totalIncome += Number(t.amount);
+      } else if (t.type === "expense") {
+        totals.totalExpense += Number(t.amount);
+      }
+      return totals;
+    },
+    { totalIncome: 0, totalExpense: 0 },
+  );
 
-  const totalIncome = (transaction || [])
-    .filter((t) => t.type === "income")
-    .reduce((sum, t) => sum + t.amount, 0);
+  const formattedIncome = formatToIDR(totalIncome);
+  const formattedExpense = formatToIDR(totalExpense);
 
-  const totalExpense = (transaction || [])
-    .filter((t) => t.type === "expense")
-    .reduce((sum, t) => sum + t.amount, 0);
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: keyof KasPayload,
+  ) => {
+    const rawValue = e.target.value.replace(/[^\d]/g, "");
+    const numericValue = rawValue ? Number(rawValue) : null;
+
+    setKasPayload((prev) => ({ ...prev, [field]: numericValue }));
+  };
 
   const handleOk = async () => {
     if (selectedTransaction) {
-      await sleep(1000);
+      await sleep(100);
       await deleteTransaction(selectedTransaction.id);
       setIsModalOpen(false);
       showToast("Transaction deleted successfully", "success");
       await allTransaction({ ...pagination });
+      await allSetting({});
     }
+  };
+
+  const onUpdateKas = async () => {
+    await updateKasSetting(kasPayload);
+  };
+
+  const exportExcel = () => {
+    const data = transaction.map((s: Transaction) => ({
+      Date: s.date,
+      Type: s.type,
+      Category: s.category,
+      Amount: s.amount,
+      Description: s.description,
+    }));
+    exportToExcel(data, "data-keuangan.xlsx");
   };
 
   useEffect(() => {
     allTransaction({});
-  }, [allTransaction]);
+    allSetting({});
+  }, [allTransaction, allSetting]);
+
+  useEffect(() => {
+    if (setting) {
+      setKasPayload(setting);
+    }
+  }, [setting]);
 
   return (
     <div>
       <ToastComponent />
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Keuangan</h1>
-        <button
-          onClick={handleAdd}
-          className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Add Transaction
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={exportExcel}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md flex items-center"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Export Transaction
+          </button>
+          <button
+            onClick={() => setIsModalKasOpen(true)}
+            className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add KAS
+          </button>
+          <button
+            onClick={handleAdd}
+            className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Transaction
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="space-y-6 my-6">
+        <div className="bg-white rounded-lg shadow-md p-6 w-full">
           <div className="flex items-center">
-            <TrendingUp className="w-8 h-8 text-green-500 mr-4" />
+            <Wallet className="w-8 h-8 text-blue-500 mr-4" />
             <div>
-              <h3 className="text-sm font-medium text-gray-500">
-                Total Income
-              </h3>
-              <p className="text-2xl font-bold text-green-600">
-                Rp {totalIncome.toLocaleString()}
+              <h3 className="text-sm font-medium text-gray-500">Saldo KAS</h3>
+              <p className="text-2xl font-bold text-blue-600">
+                {formatToIDR(Number(setting.kas_amount))}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center">
-            <TrendingDown className="w-8 h-8 text-red-500 mr-4" />
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">
-                Total Expense
-              </h3>
-              <p className="text-2xl font-bold text-red-600">
-                Rp {totalExpense.toLocaleString()}
-              </p>
+        {/* Two column cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="flex items-center">
+              <TrendingUp className="w-8 h-8 text-green-500 mr-4" />
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">
+                  Total Income
+                </h3>
+                <p className="text-2xl font-bold text-green-600">
+                  {formattedIncome}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="flex items-center">
+              <TrendingDown className="w-8 h-8 text-red-500 mr-4" />
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">
+                  Total Expense
+                </h3>
+                <p className="text-2xl font-bold text-red-600">
+                  {formattedExpense}
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -204,7 +287,7 @@ const KeuanganPage = () => {
                           : "text-red-600"
                       }
                     >
-                      Rp {transaction.amount.toLocaleString()}
+                      {formatToIDR(Number(transaction.amount))}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -218,7 +301,7 @@ const KeuanganPage = () => {
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => handleDelete(transaction.id)}
+                      onClick={() => handleDelete(transaction)}
                       className="text-red-600 hover:text-red-900"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -237,6 +320,48 @@ const KeuanganPage = () => {
           />
         </div>
       </div>
+
+      <Modal
+        isOpen={isModalKasOpen}
+        onClose={() => setIsModalKasOpen(false)}
+        title="Add New KAS"
+        isFooter={true}
+        onOk={onUpdateKas}
+      >
+        <label className="block text-sm font-medium text-gray-700">
+          Amount
+        </label>
+        <input
+          type="text"
+          className="mt-1 block w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+          value={
+            kasPayload.kas_amount !== null
+              ? formatToIDR(kasPayload.kas_amount)
+              : ""
+          }
+          onChange={(e) => handleInputChange(e, "kas_amount")}
+        />
+        <label className="block text-sm font-medium text-gray-700">Date</label>
+        <input
+          type="date"
+          className="mt-1 block w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+          value={kasPayload.kas_date || ""}
+          onChange={(e) =>
+            setKasPayload({ ...kasPayload, kas_date: e.target.value })
+          }
+        />
+        <label className="block text-sm font-medium text-gray-700">
+          Description
+        </label>
+        <textarea
+          rows={4}
+          className="mt-1 block w-full p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+          value={kasPayload.kas_description || ""}
+          onChange={(e) =>
+            setKasPayload({ ...kasPayload, kas_description: e.target.value })
+          }
+        />
+      </Modal>
 
       <Modal
         isOpen={isModalOpen}
@@ -267,4 +392,3 @@ const KeuanganPage = () => {
 };
 
 export default KeuanganPage;
-

@@ -66,6 +66,9 @@ export interface Settings {
   phone_number: string;
   email: string;
   spp_amount: number;
+  kas_amount: number;
+  kas_date: string;
+  kas_description: string;
   registration_fee: number;
   is_email_notification: number;
   is_sms_notification: number;

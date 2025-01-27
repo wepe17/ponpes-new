@@ -7,6 +7,7 @@ import { useSantriStore } from "../store/santri";
 import { useToast } from "../hooks/useToast";
 import { sleep } from "../utils";
 import Pagination from "../components/Pagination";
+import { exportToExcel } from "../config/excel";
 
 const SantriPage = () => {
   const {
@@ -80,6 +81,16 @@ const SantriPage = () => {
     }
   };
 
+  const exportExcel = () => {
+    const data = santri.map((s) => ({
+      NIS: s.nis,
+      Name: s.name,
+      Class: s.class,
+      Status: s.status,
+    }));
+    exportToExcel(data, "data-santri.xlsx");
+  };
+
   useEffect(() => {
     allSantri({});
   }, [allSantri]);
@@ -89,13 +100,21 @@ const SantriPage = () => {
       <ToastComponent />
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Data Santri</h1>
-        <button
-          onClick={handleAdd}
-          className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Add New Santri
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleAdd}
+            className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add New Santri
+          </button>
+          <button
+            onClick={exportExcel}
+            className="px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            Export Excel
+          </button>
+        </div>
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6">

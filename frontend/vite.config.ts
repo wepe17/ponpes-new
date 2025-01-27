@@ -13,6 +13,8 @@ export default defineConfig({
   },
   server: {
     host: true,
+    allowedHosts: ["4fe7-180-248-30-157.ngrok-free.app"],
+    // allowOverwrite: true,
     port: Number(process.env?.VITE_DEVELOPMENT_PORT || 5173),
     hmr: process.env.NODE_ENV !== "production",
     proxy: {
