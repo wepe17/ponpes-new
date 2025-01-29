@@ -53,7 +53,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div
+        className={`grid grid-cols-1  gap-4 ${!initialData?.amount ? "md:grid-cols-2" : ""}`}
+      >
         <FormField label="Date" error={errors.date?.message}>
           <input
             type="date"
@@ -62,13 +64,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           />
         </FormField>
 
-        <FormField label="Amount" error={errors.amount?.message}>
-          <input
-            type="number"
-            {...register("amount", { valueAsNumber: true })}
-            className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
-          />
-        </FormField>
+        {!initialData?.amount && (
+          <FormField label="Amount" error={errors.amount?.message}>
+            <input
+              type="number"
+              {...register("amount", { valueAsNumber: true })}
+              className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            />
+          </FormField>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -112,4 +116,3 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 };
 
 export default TransactionForm;
-
