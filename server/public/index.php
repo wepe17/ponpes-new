@@ -9,11 +9,19 @@ use App\Controllers\UsersController;
 use App\Controllers\PaymentsController;
 use App\Controllers\TransactionsController;
 use App\Controllers\AlumniController;
+use App\Controllers\ReportController;
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+
+// $allowedOrigins = ['https://4fe7-180-248-30-157.ngrok-free.app', 'http://localhost:5173']; // Tambahkan URL frontend Anda
+// $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+//
+// if (in_array($origin, $allowedOrigins)) {
+//     header("Access-Control-Allow-Origin: $origin");
+// }
 
 // Handle OPTIONS requests for CORS preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -89,6 +97,16 @@ try {
             break;
         case 'settings':
             $controller = new SettingsController();
+
+            if ($uri[2] === 'transaction') {
+                $data = json_decode(file_get_contents('php://input'), true);
+                $result = $controller->updateKas($data);
+                echo json_encode($result);
+                exit;
+            }
+            break;
+        case 'reports':
+            $controller = new ReportController();
             break;
         default:
             http_response_code(404);

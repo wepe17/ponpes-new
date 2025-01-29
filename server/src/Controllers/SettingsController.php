@@ -20,6 +20,55 @@ class SettingsController
         return $stmt->fetchAll();
     }
 
+    public function updateKas($data)
+    {
+        $stmt = $this->db->prepare('SELECT COUNT(*) FROM settings');
+        $stmt->execute();
+        $exists = $stmt->fetchColumn() > 0;
+
+        if ($exists) {
+            $sql = 'UPDATE settings SET 
+                kas_amount = ?, 
+                kas_date = ?, 
+                kas_description = ?,
+                updated_at = CURRENT_TIMESTAMP';
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                $data['kas_amount'] ?? null,
+                $data['kas_date'] ?? null,
+                $data['kas_description'] ?? null,
+            ]);
+
+            $this->saveToReport($data, 'update');
+
+            return [
+                'data' => $this->show('1'),
+                'statusCode' => 200,
+                'msg' => 'Kas berhasil diupdate'
+            ];
+        } else {
+            $sql = 'INSERT INTO settings (id, kas_amount, kas_date, kas_description, created_at, updated_at) 
+                VALUES (UUID(), ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)';
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                $data['kas_amount'] ?? null,
+                $data['kas_date'] ?? null,
+                $data['kas_description'] ?? null,
+            ]);
+
+            $this->saveToReport($data, 'insert');
+
+            return [
+                'data' => $this->show($this->db->lastInsertId()),
+                'statusCode' => 201,
+                'msg' => 'Data berhasil disimpan'
+            ];
+        }
+
+    }
+
     public function createOrUpdate($data)
     {
         $stmt = $this->db->prepare('SELECT COUNT(*) FROM settings');
@@ -175,5 +224,21 @@ class SettingsController
     {
         $stmt = $this->db->prepare('DELETE FROM settings WHERE id = ?');
         return $stmt->execute([$id]);
+    }
+
+    private function saveToReport($data, $action)
+    {
+        $sql = 'INSERT INTO reports (id, kas_amount, kas_date, kas_description, action, created_at) 
+            VALUES (UUID(), ?, ?, ?, ?, CURRENT_TIMESTAMP)';
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            $data['kas_amount'] ?? null,
+            $data['kas_date'] ?? null,
+            $data['kas_description'] ?? null,
+            $action,
+        ]);
+
+        return $this->show($this->db->lastInsertId());
     }
 }

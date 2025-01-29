@@ -52,16 +52,29 @@ CREATE TABLE IF NOT EXISTS transactions (
 CREATE TABLE IF NOT EXISTS settings (
     id VARCHAR(36) PRIMARY KEY,
     -- general
-    school_name VARCHAR(100) NOT NULL,
-    address TEXT NOT NULL,
-    phone_number VARCHAR(20) NOT NULL,
-    email VARCHAR(255) NOT NULL,
+    school_name VARCHAR(100),
+    address TEXT,
+    phone_number VARCHAR(20),
+    email VARCHAR(255),
     -- payment
-    spp_amount DECIMAL(10, 2) NOT NULL,
-    registration_fee DECIMAL(10, 2) NOT NULL,
+    spp_amount DECIMAL(10, 2),
+    registration_fee DECIMAL(10, 2),
+    -- kas
+    kas_amount DECIMAL(10, 2),
+    kas_date DATE,
+    kas_description TEXT,
     -- system notification
-    is_email_notification TINYINT(1) NOT NULL DEFAULT 0,
-    is_sms_notification TINYINT(1) NOT NULL DEFAULT 0,
+    is_email_notification TINYINT(1) DEFAULT 0,
+    is_sms_notification TINYINT(1) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE report (
+    id VARCHAR(36) PRIMARY KEY,
+    kas_amount DECIMAL(10, 2),
+    kas_date DATE,
+    kas_description TEXT,
+    action VARCHAR(10), -- Untuk mencatat 'insert' atau 'update'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -55,6 +55,7 @@ class TransactionsController
 
     public function store($data)
     {
+
         $sql = 'INSERT INTO transactions (id, date, amount, type, category, description) 
                 VALUES (UUID(), ?, ?, ?, ?, ?)';
 
@@ -67,6 +68,8 @@ class TransactionsController
             $data['description'],
         ]);
 
+        $this->updateKasAmount($data);
+
         return [
             'data' => $this->show($this->db->lastInsertId()),
             'statusCode' => 201,
@@ -76,6 +79,7 @@ class TransactionsController
 
     public function update($id, $data)
     {
+
         $sql = 'UPDATE transactions SET 
                 date = ?, amount = ?, type = ?, category = ?, description = ? 
                 WHERE id = ?';
@@ -99,8 +103,50 @@ class TransactionsController
 
     public function destroy($id)
     {
+
+        $getTrx = $this->db->prepare('SELECT type, amount FROM transactions WHERE id = ?');
+        $getTrx->execute([$id]);
+        $transaction = $getTrx->fetch();
+
+        $stmt = $this->db->query('SELECT * FROM settings');
+        $setting = $stmt->fetch();
+
+        if (!$transaction) {
+            return false;
+        }
+
+        $updateSaldo = $this->db->prepare('UPDATE settings SET kas_amount = kas_amount - ? WHERE id = ?');
+
+        if ($transaction['type'] === 'income') {
+
+            $adjustmentAmount =  $transaction['amount'] ;
+            $updateSaldo->execute([$adjustmentAmount, $setting['id']]);
+        }
+
         $stmt = $this->db->prepare('DELETE FROM transactions WHERE id = ?');
         return $stmt->execute([$id]);
+
+    }
+
+    private function updateKasAmount($data)
+    {
+        $stmt = $this->db->query('SELECT * FROM settings');
+        $setting = $stmt->fetch();
+
+        if ($data['type'] == 'income') {
+            $sql = 'UPDATE settings SET kas_amount = kas_amount + ? WHERE id = ?';
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                $data['amount'],
+                $setting['id']
+            ]);
+        } else {
+            $sql = 'UPDATE settings SET kas_amount = kas_amount - ? WHERE id = ?';
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                $data['amount'],
+                $setting['id']
+            ]);
+        }
     }
 }
-
