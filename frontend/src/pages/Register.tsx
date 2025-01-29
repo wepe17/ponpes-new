@@ -1,0 +1,125 @@
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useAuthStore } from "../store/auth";
+import { School } from "lucide-react";
+
+interface RegisterForm {
+  username: string;
+  name: string;
+  role: "admin" | "staff";
+  password: string;
+}
+
+const Register = () => {
+  const navigate = useNavigate();
+  const registration = useAuthStore((state) => state.register);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterForm>();
+
+  const onSubmit = async (data: RegisterForm) => {
+    try {
+      await registration(data);
+      navigate("/login");
+    } catch (error) {
+      alert("Register failed. Please check your credentials.");
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="bg-white p-8 rounded-lg shadow-md w-96">
+        <div className="text-center mb-8">
+          <School className="w-12 h-12 mx-auto text-green-600" />
+          <h1 className="text-2xl font-bold mt-4">
+            Pesantren Management System
+          </h1>
+          <p className="text-gray-600 mt-2">Please Register to continue</p>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Fullname
+            </label>
+            <input
+              type="text"
+              {...register("name", { required: "name is required" })}
+              className="mt-1 p-2 h-10 block w-full rounded-md border shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Username
+            </label>
+            <input
+              type="text"
+              {...register("username", { required: "Username is required" })}
+              className="mt-1 p-2 h-10 block w-full rounded-md border shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            />
+            {errors.username && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.username.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Role
+            </label>
+            <select
+              {...register("role", { required: "Role is required" })}
+              className="mt-1 p-2 h-10 block w-full rounded-md border shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            >
+              <option value="admin">Admin</option>
+              <option value="staff">Staff</option>
+            </select>
+            {errors.role && (
+              <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              type="password"
+              {...register("password", { required: "Password is required" })}
+              className="mt-1 p-2 h-10 block w-full rounded-md border shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+            />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+          >
+            Register
+          </button>
+        </form>
+
+        <div className="text-center mt-4">
+          already have an account?{" "}
+          <Link to="/login" className="text-green-600">
+            Login
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Register;
