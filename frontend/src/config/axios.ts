@@ -2,8 +2,7 @@ import axios from "axios";
 import { getLocalStorage } from "../config/local-storage";
 
 const apiClient = axios.create({
-  // baseURL: import.meta.env.VITE_API_URL, // Sesuaikan dengan base URL API Anda
-  baseURL: "http://localhost:5173/api", // proxy url
+  baseURL: import.meta.env.VITE_API_URL, // Sesuaikan dengan base URL API Anda
   timeout: 5000,
 });
 

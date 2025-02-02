@@ -13,19 +13,21 @@ export default defineConfig({
   },
   server: {
     host: true,
-    allowedHosts: ["4fe7-180-248-30-157.ngrok-free.app"],
-    // allowOverwrite: true,
-    port: Number(process.env?.VITE_DEVELOPMENT_PORT || 5173),
+    port: Number(process.env?.VITE_DEVELOPMENT_PORT || 5174),
     hmr: process.env.NODE_ENV !== "production",
     proxy: {
       "/api": {
-        // using env variable later
-        target: "http://localhost:32771/ponpes-be/public",
+        target: process.env.VITE_API_URL,
         changeOrigin: true,
         secure: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
     cors: false,
+  },
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
+    emptyOutDir: true,
   },
 });
