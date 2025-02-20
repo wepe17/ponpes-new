@@ -207,9 +207,9 @@ const SPPPage = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title={
-          (entry === "delete" && "Delete Payment") ||
-          (entry === "update" && "Edit Payment") ||
-          "Add New Payment"
+          (entry === "delete" && "Hapus Pembayaran") ||
+          (entry === "update" && "Edit Pembayaran") ||
+          "Tambahkan Pembayaran Baru"
         }
       >
         <PaymentForm
@@ -234,7 +234,7 @@ const SPPPage = () => {
             <Search className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
             <input
               type="text"
-              placeholder="Search by name or NIS..."
+              placeholder="Cari berdasarkan nama atau NIS..."
               className="pl-10 w-full p-2 border rounded-md"
               value={searchSantriTerm}
               onChange={(e) => setSearchSantriTerm(e.target.value)}

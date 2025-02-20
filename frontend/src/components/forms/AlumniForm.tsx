@@ -5,13 +5,13 @@ import { z } from "zod";
 import { Alumni } from "../../types";
 
 const schema = z.object({
-  name: z.string().min(1, "Name is required"),
-  nis: z.string().min(1, "NIS is required"),
-  graduationYear: z.string().min(1, "Graduation year is required"),
-  address: z.string().min(1, "Address is required"),
-  phoneNumber: z.string().min(1, "Phone number is required"),
-  occupation: z.string().min(1, "Occupation is required"),
-  email: z.string().email("Invalid email address"),
+  name: z.string().min(1, "Nama Harus Diisi"),
+  nis: z.string().min(1, "NIS harus diisi"),
+  graduationYear: z.string().min(1, "Tahun Lulus harus diisi"),
+  address: z.string().min(1, "Alamat harus diisi"),
+  phoneNumber: z.string().min(1, "Nomor telepon harus diisi"),
+  occupation: z.string().min(1, "Pekerjaan harus diisi"),
+  email: z.string().email("Email salah"),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -34,7 +34,7 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onSubmit, initialData }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700">Name</label>
+        <label className="block text-sm font-medium text-gray-700">Nama Lengkap</label>
         <input
           type="text"
           {...register("name")}
@@ -59,7 +59,7 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onSubmit, initialData }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Graduation Year
+          Tahun Lulus
         </label>
         <input
           type="text"
@@ -75,7 +75,7 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onSubmit, initialData }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Address
+          Alamat
         </label>
         <textarea
           {...register("address")}
@@ -89,7 +89,7 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onSubmit, initialData }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Phone Number
+          Nomor Telepon
         </label>
         <input
           type="tel"
@@ -105,7 +105,7 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onSubmit, initialData }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Occupation
+          Pekerjaan Saat ini
         </label>
         <input
           type="text"
@@ -136,7 +136,7 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onSubmit, initialData }) => {
           type="submit"
           className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
         >
-          Save
+          Simpan
         </button>
       </div>
     </form>

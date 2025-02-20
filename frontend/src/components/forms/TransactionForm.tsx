@@ -5,11 +5,11 @@ import { z } from "zod";
 import { Transaction } from "../../types";
 
 const schema = z.object({
-  date: z.string().min(1, "Date is required"),
-  amount: z.number().min(1, "Amount must be greater than 0"),
-  type: z.enum(["income", "expense"]),
-  category: z.string().min(1, "Category is required"),
-  description: z.string().min(1, "Description is required"),
+  date: z.string().min(1, "Tanggal harus diisi"),
+  amount: z.number().min(1, "Jumlah harus lebih besar dari 0"),
+  type: z.enum(["pendapatan", "pengeluaran"]),
+  category: z.string().min(1, "Kategori harus diisi"),
+  description: z.string().min(1, "Deskripsi harus diisi"),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -56,7 +56,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       <div
         className={`grid grid-cols-1  gap-4 ${!initialData?.amount ? "md:grid-cols-2" : ""}`}
       >
-        <FormField label="Date" error={errors.date?.message}>
+        <FormField label="Tanggal" error={errors.date?.message}>
           <input
             type="date"
             {...register("date")}
@@ -65,7 +65,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         </FormField>
 
         {!initialData?.amount && (
-          <FormField label="Amount" error={errors.amount?.message}>
+          <FormField label="Jumlah" error={errors.amount?.message}>
             <input
               type="number"
               {...register("amount", { valueAsNumber: true })}
@@ -81,12 +81,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             {...register("type")}
             className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           >
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
+            <option value="income">Pendapatan</option>
+            <option value="expense">Pengeluaran</option>
           </select>
         </FormField>
 
-        <FormField label="Category" error={errors.category?.message}>
+        <FormField label="Kategori" error={errors.category?.message}>
           <input
             type="text"
             {...register("category")}
@@ -95,7 +95,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         </FormField>
       </div>
 
-      <FormField label="Description" error={errors.description?.message}>
+      <FormField label="Deskripsi" error={errors.description?.message}>
         <textarea
           {...register("description")}
           rows={3}
@@ -108,7 +108,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           type="submit"
           className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
         >
-          Save
+          Simpan
         </button>
       </div>
     </form>

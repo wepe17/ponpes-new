@@ -5,13 +5,13 @@ import { z } from "zod";
 import { Asatidz } from "../../types";
 
 const schema = z.object({
-  name: z.string().min(1, "Name is required"),
-  nip: z.string().min(1, "NIP is required"),
-  subject: z.string().min(1, "Subject is required"),
-  phone_number: z.string().min(1, "Phone number is required"),
-  address: z.string().min(1, "Address is required"),
-  join_date: z.string().min(1, "Join date is required"),
-  status: z.enum(["active", "inactive"]),
+  name: z.string().min(1, "Nama harus diisi"),
+  nip: z.string().min(1, "NIP harus diisi"),
+  subject: z.string().min(1, "Mata Pelajaran harus diisi"),
+  phone_number: z.string().min(1, "Nomor Telpon harus diisi"),
+  address: z.string().min(1, "Alamat harus diisi"),
+  join_date: z.string().min(1, "Tanggal Bergabung harus diidi"),
+  status: z.enum(["aktif", "tidak aktif"]),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -50,7 +50,7 @@ const AsatidzForm: React.FC<AsatidzFormProps> = ({ onSubmit, initialData }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField label="Name" error={errors.name?.message}>
+        <FormField label="Nama Lengkap" error={errors.name?.message}>
           <input
             type="text"
             {...register("name")}
@@ -76,7 +76,7 @@ const AsatidzForm: React.FC<AsatidzFormProps> = ({ onSubmit, initialData }) => {
           />
         </FormField>
 
-        <FormField label="Join Date" error={errors.join_date?.message}>
+        <FormField label="Tanggal Bergabung" error={errors.join_date?.message}>
           <input
             type="date"
             {...register("join_date")}
@@ -85,7 +85,7 @@ const AsatidzForm: React.FC<AsatidzFormProps> = ({ onSubmit, initialData }) => {
         </FormField>
       </div>
 
-      <FormField label="Address" error={errors.address?.message}>
+      <FormField label="Alamat" error={errors.address?.message}>
         <textarea
           {...register("address")}
           rows={3}
@@ -94,7 +94,7 @@ const AsatidzForm: React.FC<AsatidzFormProps> = ({ onSubmit, initialData }) => {
       </FormField>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField label="Phone Number" error={errors.phone_number?.message}>
+        <FormField label="Nomor Telepon" error={errors.phone_number?.message}>
           <input
             type="tel"
             {...register("phone_number")}
@@ -107,8 +107,8 @@ const AsatidzForm: React.FC<AsatidzFormProps> = ({ onSubmit, initialData }) => {
             {...register("status")}
             className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           >
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
+            <option value="active">Aktif</option>
+            <option value="inactive">Tidak Aktif</option>
           </select>
         </FormField>
       </div>
@@ -118,7 +118,7 @@ const AsatidzForm: React.FC<AsatidzFormProps> = ({ onSubmit, initialData }) => {
           type="submit"
           className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
         >
-          Save
+          Simpan
         </button>
       </div>
     </form>

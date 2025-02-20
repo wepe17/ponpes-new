@@ -99,7 +99,7 @@ const AlumniPage = () => {
           <Search className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
           <input
             type="text"
-            placeholder="Search by name or NIS..."
+            placeholder="Cari berdasarkan nama atau NIS..."
             className="pl-10 w-full p-2 border rounded-md"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -123,7 +123,7 @@ const AlumniPage = () => {
                   Pekerjaan Saat Ini
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
+                  Aksi
                 </th>
               </tr>
             </thead>

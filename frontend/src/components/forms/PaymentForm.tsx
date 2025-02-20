@@ -6,10 +6,10 @@ import { Payment, Santri } from "../../types";
 
 const schema = z.object({
   // santri_id: z.string().min(1, "Student ID is required"),
-  amount: z.number().min(1, "Amount must be greater than 0"),
-  date: z.string().min(1, "Date is required"),
-  type: z.enum(["SPP", "Registration", "Other"]),
-  status: z.enum(["paid", "pending"]),
+  amount: z.number().min(1, "Jumlah harus lebih besar dari 0"),
+  date: z.string().min(1, "Tanggal harus diisi"),
+  type: z.enum(["SPP", "Pendaftaran", "Lainnya"]),
+  status: z.enum(["sudah bayar", "pending"]),
   description: z.string().optional(),
 });
 
@@ -59,7 +59,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <FormField label="Student ID">
+      <FormField label="ID Santri">
         <input
           type="text"
           // {...register("santri_id")}
@@ -71,7 +71,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
       </FormField>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField label="Amount" error={errors.amount?.message}>
+        <FormField label="Jumlah" error={errors.amount?.message}>
           <input
             type="number"
             {...register("amount", { valueAsNumber: true })}
@@ -79,7 +79,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           />
         </FormField>
 
-        <FormField label="Date" error={errors.date?.message}>
+        <FormField label="Tanggal" error={errors.date?.message}>
           <input
             type="date"
             {...register("date")}
@@ -89,14 +89,14 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField label="Type" error={errors.type?.message}>
+        <FormField label="Tipe" error={errors.type?.message}>
           <select
             {...register("type")}
             className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           >
             <option value="SPP">SPP</option>
-            <option value="Registration">Registration</option>
-            <option value="Other">Other</option>
+            <option value="Registration">Pendaftaran</option>
+            <option value="Other">Lainnya</option>
           </select>
         </FormField>
 
@@ -105,13 +105,13 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             {...register("status")}
             className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           >
-            <option value="paid">Paid</option>
+            <option value="paid">Sudah Bayar</option>
             <option value="pending">Pending</option>
           </select>
         </FormField>
       </div>
 
-      <FormField label="Description" error={errors.description?.message}>
+      <FormField label="Deskripsi" error={errors.description?.message}>
         <textarea
           {...register("description")}
           rows={3}
@@ -124,7 +124,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           type="submit"
           className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
         >
-          Save
+          Simpan
         </button>
       </div>
     </form>

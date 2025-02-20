@@ -5,15 +5,15 @@ import { z } from "zod";
 import { Santri } from "../../types";
 
 const schema = z.object({
-  name: z.string().min(1, "Name is required"),
-  nis: z.string().min(1, "NIS is required"),
-  date_of_birth: z.string().min(1, "Date of birth is required"),
-  address: z.string().min(1, "Address is required"),
-  parent_name: z.string().min(1, "Parent name is required"),
-  phone_number: z.string().min(1, "Phone number is required"),
-  enrollment_date: z.string().min(1, "Enrollment date is required"),
-  class: z.string().min(1, "Class is required"),
-  status: z.enum(["active", "inactive"]),
+  name: z.string().min(1, "Nama harus diisi"),
+  nis: z.string().min(1, "NIS harus diisi"),
+  date_of_birth: z.string().min(1, "Tanggal Lahir harus diisi"),
+  address: z.string().min(1, "Alamat harus diisi"),
+  parent_name: z.string().min(1, "Nama Orangtua harus diisi"),
+  phone_number: z.string().min(1, "Nomor Telepon harus diisi"),
+  enrollment_date: z.string().min(1, "Tanggal Pendaftaran harus diisi"),
+  class: z.string().min(1, "Kelas harus diisi"),
+  status: z.enum(["aktif", "tidak aktif"]),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -52,7 +52,7 @@ const SantriForm: React.FC<SantriFormProps> = ({ onSubmit, initialData }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField label="Name" error={errors.name?.message}>
+        <FormField label="Nama Lengkap" error={errors.name?.message}>
           <input
             type="text"
             {...register("name")}
@@ -70,7 +70,7 @@ const SantriForm: React.FC<SantriFormProps> = ({ onSubmit, initialData }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField label="Date of Birth" error={errors.date_of_birth?.message}>
+        <FormField label="Tanggal Lahir" error={errors.date_of_birth?.message}>
           <input
             type="date"
             {...register("date_of_birth")}
@@ -79,7 +79,7 @@ const SantriForm: React.FC<SantriFormProps> = ({ onSubmit, initialData }) => {
         </FormField>
 
         <FormField
-          label="Enrollment Date"
+          label="Tanggal Pendaftaran"
           error={errors.enrollment_date?.message}
         >
           <input
@@ -90,7 +90,7 @@ const SantriForm: React.FC<SantriFormProps> = ({ onSubmit, initialData }) => {
         </FormField>
       </div>
 
-      <FormField label="Address" error={errors.address?.message}>
+      <FormField label="Alamat" error={errors.address?.message}>
         <textarea
           {...register("address")}
           rows={3}
@@ -99,7 +99,7 @@ const SantriForm: React.FC<SantriFormProps> = ({ onSubmit, initialData }) => {
       </FormField>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField label="Parent Name" error={errors.parent_name?.message}>
+        <FormField label="Nama Orangtua" error={errors.parent_name?.message}>
           <input
             type="text"
             {...register("parent_name")}
@@ -107,7 +107,7 @@ const SantriForm: React.FC<SantriFormProps> = ({ onSubmit, initialData }) => {
           />
         </FormField>
 
-        <FormField label="Phone Number" error={errors.phone_number?.message}>
+        <FormField label="Nomor Telepon" error={errors.phone_number?.message}>
           <input
             type="tel"
             {...register("phone_number")}
@@ -117,7 +117,7 @@ const SantriForm: React.FC<SantriFormProps> = ({ onSubmit, initialData }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField label="Class" error={errors.class?.message}>
+        <FormField label="Kelas" error={errors.class?.message}>
           <input
             type="text"
             {...register("class")}
@@ -130,8 +130,8 @@ const SantriForm: React.FC<SantriFormProps> = ({ onSubmit, initialData }) => {
             {...register("status")}
             className="w-full border h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           >
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
+            <option value="active">Aktif</option>
+            <option value="inactive">Tidak Aktif</option>
           </select>
         </FormField>
       </div>
@@ -141,7 +141,7 @@ const SantriForm: React.FC<SantriFormProps> = ({ onSubmit, initialData }) => {
           type="submit"
           className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
         >
-          Save
+          Simpan
         </button>
       </div>
     </form>

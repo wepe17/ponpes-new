@@ -228,7 +228,7 @@ const KeuanganPage = () => {
           <Search className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
           <input
             type="text"
-            placeholder="Search by description or category..."
+            placeholder="Cari berdasarkan deskripsi atau kategori..."
             className="pl-10 w-full p-2 border rounded-md"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}

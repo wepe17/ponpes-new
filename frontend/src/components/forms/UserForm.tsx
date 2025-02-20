@@ -5,10 +5,10 @@ import { z } from "zod";
 import { User } from "../../types";
 
 const schema = z.object({
-  username: z.string().min(1, "Username is required"),
-  name: z.string().min(1, "Name is required"),
+  // username: z.string().min(1, "Nama Pengurus harus diisi"),
+  name: z.string().min(1, "Nama Lengkap harus diisi"),
   role: z.enum(["admin", "staff"]),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  // password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -46,15 +46,15 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, initialData }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <FormField label="Username" error={errors.username?.message}>
-        <input
-          type="text"
-          {...register("username")}
-          className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
-        />
-      </FormField>
+    {/* //   <FormField label="Username" error={errors.username?.message}>
+    //     <input
+    //       type="text"
+    //       {...register("username")}
+    //       className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
+    //     />
+    //   </FormField> */}
 
-      <FormField label="Name" error={errors.name?.message}>
+      <FormField label="Nama Lengkap" error={errors.name?.message}>
         <input
           type="text"
           {...register("name")}
@@ -62,7 +62,7 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, initialData }) => {
         />
       </FormField>
 
-      <FormField label="Role" error={errors.role?.message}>
+      <FormField label="Jabatan" error={errors.role?.message}>
         <select
           {...register("role")}
           className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
@@ -72,7 +72,7 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, initialData }) => {
         </select>
       </FormField>
 
-      {!initialData && (
+      {/* {!initialData && (
         <FormField label="Password" error={errors.password?.message}>
           <input
             type="password"
@@ -80,14 +80,14 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, initialData }) => {
             className="w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           />
         </FormField>
-      )}
+      )} */}
 
       <div className="flex justify-end pt-4">
         <button
           type="submit"
           className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
         >
-          Save
+          Simpan
         </button>
       </div>
     </form>
