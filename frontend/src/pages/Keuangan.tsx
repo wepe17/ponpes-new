@@ -186,7 +186,7 @@ const KeuanganPage = () => {
             <div>
               <h3 className="text-sm font-medium text-gray-500">Saldo KAS</h3>
               <p className="text-2xl font-bold text-blue-600">
-                {formatToIDR(Number(setting.kas_amount))}
+                {formatToIDR(Number(setting?.kas_amount) || 0)}
               </p>
             </div>
           </div>

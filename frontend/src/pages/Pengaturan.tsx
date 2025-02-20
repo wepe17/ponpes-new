@@ -55,7 +55,7 @@ const PengaturanPage = () => {
             <div>
               <FormField label="School Name">
                 <input
-                  value={payload.school_name || ""}
+                  value={payload?.school_name || ""}
                   onChange={(e) =>
                     setPayload({ ...payload, school_name: e.target.value })
                   }
@@ -67,7 +67,7 @@ const PengaturanPage = () => {
             <div>
               <FormField label="Address">
                 <input
-                  value={payload.address || ""}
+                  value={payload?.address || ""}
                   onChange={(e) =>
                     setPayload({ ...payload, address: e.target.value })
                   }
@@ -79,7 +79,7 @@ const PengaturanPage = () => {
             <div>
               <FormField label="Phone Number">
                 <input
-                  value={payload.phone_number || ""}
+                  value={payload?.phone_number || ""}
                   onChange={(e) =>
                     setPayload({ ...payload, phone_number: e.target.value })
                   }
@@ -91,7 +91,7 @@ const PengaturanPage = () => {
             <div>
               <FormField label="Email">
                 <input
-                  value={payload.email || ""}
+                  value={payload?.email || ""}
                   onChange={(e) =>
                     setPayload({ ...payload, email: e.target.value })
                   }
@@ -109,7 +109,7 @@ const PengaturanPage = () => {
             <div>
               <FormField label="Monthly SPP Amount">
                 <input
-                  value={payload.spp_amount || ""}
+                  value={payload?.spp_amount || ""}
                   onChange={(e) =>
                     setPayload({
                       ...payload,
@@ -124,7 +124,7 @@ const PengaturanPage = () => {
             <div>
               <FormField label="Registration Fee">
                 <input
-                  value={payload.registration_fee || ""}
+                  value={payload?.registration_fee || ""}
                   onChange={(e) =>
                     setPayload({
                       ...payload,
@@ -145,7 +145,7 @@ const PengaturanPage = () => {
             <div>
               <label className="flex items-center">
                 <input
-                  value={payload.is_email_notification || ""}
+                  value={payload?.is_email_notification || ""}
                   onChange={(e) =>
                     setPayload({
                       ...payload,
@@ -163,7 +163,7 @@ const PengaturanPage = () => {
             <div>
               <label className="flex items-center">
                 <input
-                  value={payload.is_sms_notification || ""}
+                  value={payload?.is_sms_notification || ""}
                   onChange={(e) =>
                     setPayload({
                       ...payload,

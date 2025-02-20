@@ -15,6 +15,7 @@ export default defineConfig({
     host: true,
     port: Number(process.env?.VITE_DEVELOPMENT_PORT || 5174),
     hmr: process.env.NODE_ENV !== "production",
+    allowedHosts: "all",
     proxy: {
       "/api": {
         target: process.env.VITE_API_URL,

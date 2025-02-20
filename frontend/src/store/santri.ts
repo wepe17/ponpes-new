@@ -36,7 +36,7 @@ export const useSantriStore = create<SantriState>((set) => ({
     try {
       const { page = 1, limit = 10, search = "" } = params || {};
       const resp = await apiClient.get("/api/santri", {
-        params: { page, limit, search },
+        // params: { page, limit, search },
       });
       if (resp.status === 200) {
         const { data, total, page: currentPage, total_pages } = resp.data;

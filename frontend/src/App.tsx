@@ -11,6 +11,7 @@ import Pengaturan from "./pages/Pengaturan";
 import Alumni from "./pages/Alumni";
 import { getLocalStorage } from "./config/local-storage";
 import ReportPage from "./pages/Report";
+import Register from "./pages/Register";
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -90,6 +91,7 @@ function App() {
           }
         />
         <Route path="/" element={<Login />} />
+        <Route path="/registration" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );

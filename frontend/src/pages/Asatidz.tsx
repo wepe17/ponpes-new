@@ -168,7 +168,7 @@ const AsatidzPage = () => {
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => handleDelete(a.id)}
+                      onClick={() => handleDelete(a)}
                       className="text-red-600 hover:text-red-900"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -192,10 +192,19 @@ const AsatidzPage = () => {
         onOk={handleOk}
         isFooter={entry === "delete"}
       >
-        <AsatidzForm
-          onSubmit={handleSubmit}
-          initialData={selectedAsatidz || undefined}
-        />
+        {["add", "update"].includes(entry) && (
+          <AsatidzForm
+            onSubmit={handleSubmit}
+            initialData={selectedAsatidz || undefined}
+          />
+        )}
+
+        {entry === "delete" && (
+          <div className="">
+            Are you sure you want to delete santri{" "}
+            <b>{selectedAsatidz?.name}</b> ?{" "}
+          </div>
+        )}
       </Modal>
     </div>
   );
