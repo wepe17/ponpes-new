@@ -31,11 +31,13 @@ const Login = () => {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <div className="text-center mb-8">
-          <School className="w-12 h-12 mx-auto text-green-600" />
+          <div>
+            <img src="/logo.jpeg" alt="Neoverse" />
+          </div>
           <h1 className="text-2xl font-bold mt-4">
             Pesantren Management System
           </h1>
-          <p className="text-gray-600 mt-2">Please login to continue</p>
+          <p className="text-gray-600 mt-2">Silakan masuk untuk melanjutkan</p>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
