@@ -28,7 +28,7 @@ const PengaturanPage = () => {
   const onSubmit = async () => {
     const resp = await updateSetting(payload);
     if (resp.statusCode === 200)
-      showToast("Setting updated successfully", "success");
+      showToast("Pengaturan berhasil diupdate", "success");
   };
 
   useEffect(() => {
@@ -50,10 +50,10 @@ const PengaturanPage = () => {
 
       <div className="bg-white rounded-lg shadow-md p-6">
         <div>
-          <h2 className="text-lg font-medium mb-4">General Settings</h2>
+          <h2 className="text-lg font-medium mb-4">Pengaturan Umum</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <FormField label="School Name">
+              <FormField label="Nama Ponpes">
                 <input
                   value={payload?.school_name || ""}
                   onChange={(e) =>
@@ -65,7 +65,7 @@ const PengaturanPage = () => {
               </FormField>
             </div>
             <div>
-              <FormField label="Address">
+              <FormField label="Alamat">
                 <input
                   value={payload?.address || ""}
                   onChange={(e) =>
@@ -77,7 +77,7 @@ const PengaturanPage = () => {
               </FormField>
             </div>
             <div>
-              <FormField label="Phone Number">
+              <FormField label="Nomor Telepon">
                 <input
                   value={payload?.phone_number || ""}
                   onChange={(e) =>
@@ -104,10 +104,10 @@ const PengaturanPage = () => {
         </div>
 
         <div>
-          <h2 className="text-lg font-medium mb-4">Payment Settings</h2>
+          <h2 className="text-lg font-medium mb-4">Pengaturan Pembayaran</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <FormField label="Monthly SPP Amount">
+              <FormField label="Jumlah SPP Bulanan">
                 <input
                   value={payload?.spp_amount || ""}
                   onChange={(e) =>
@@ -122,7 +122,7 @@ const PengaturanPage = () => {
               </FormField>
             </div>
             <div>
-              <FormField label="Registration Fee">
+              <FormField label="Biaya Regristasi">
                 <input
                   value={payload?.registration_fee || ""}
                   onChange={(e) =>
@@ -139,8 +139,8 @@ const PengaturanPage = () => {
           </div>
         </div>
 
-        <div>
-          <h2 className="text-lg font-medium mb-4">System Settings</h2>
+        {/* <div>
+          <h2 className="text-lg font-medium mb-4">Pengaturan Sistem</h2>
           <div className="space-y-4">
             <div>
               <label className="flex items-center">
@@ -156,7 +156,7 @@ const PengaturanPage = () => {
                   className="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
                 />
                 <span className="ml-2 text-sm text-gray-700">
-                  Enable Email Notifications
+                  Aktifkan Notifikasi Email
                 </span>
               </label>
             </div>
@@ -174,12 +174,12 @@ const PengaturanPage = () => {
                   className="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
                 />
                 <span className="ml-2 text-sm text-gray-700">
-                  Enable SMS Notifications
+                  Aktifkan Notifikasi SMS
                 </span>
               </label>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="flex justify-end">
           <button
@@ -188,7 +188,7 @@ const PengaturanPage = () => {
             className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center hover:bg-green-700"
           >
             <Save className="w-4 h-4 mr-2" />
-            Save Changes
+            Simpan Perubahan
           </button>
         </div>
       </div>

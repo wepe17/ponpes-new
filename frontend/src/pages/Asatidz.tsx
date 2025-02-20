@@ -46,13 +46,13 @@ const AsatidzPage = () => {
       const resp = await updateAsatidz(selectedAsatidz.id, data);
       if (resp.statusCode === 200) {
         await allAsatidz({ ...pagination });
-        showToast("Asatidz updated successfully", "success");
+        showToast("Asatidz berhasil diupdate", "success");
       }
     } else {
       const resp = await addAsatidz(data);
       if (resp.statusCode === 201) {
         await allAsatidz({ ...pagination });
-        showToast("Asatidz added successfully", "success");
+        showToast("Asatidz berhasil ditambahkan", "success");
       }
     }
     setIsModalOpen(false);
@@ -69,7 +69,7 @@ const AsatidzPage = () => {
       await sleep(1000);
       await deleteAsatidz(selectedAsatidz.id);
       setIsModalOpen(false);
-      showToast("Asatidz deleted successfully", "success");
+      showToast("Asatidz berhasil dihapus", "success");
       await allAsatidz({ ...pagination });
     }
   };
@@ -99,7 +99,7 @@ const AsatidzPage = () => {
             className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
           >
             <Plus className="w-4 h-4 mr-2" />
-            Add New Asatidz
+            Tambah Asatidz Baru
           </button>
           <button
             onClick={exportExcel}
@@ -130,10 +130,10 @@ const AsatidzPage = () => {
                   NIP
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Name
+                  Nama Lengkap
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Subject
+                  Mata Pelajaran
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
@@ -201,7 +201,7 @@ const AsatidzPage = () => {
 
         {entry === "delete" && (
           <div className="">
-            Are you sure you want to delete santri{" "}
+            Apakah kamu yakin menghapus data Asatidz{" "}
             <b>{selectedAsatidz?.name}</b> ?{" "}
           </div>
         )}

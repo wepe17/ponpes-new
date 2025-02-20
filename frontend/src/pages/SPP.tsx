@@ -53,14 +53,14 @@ const SPPPage = () => {
       const resp = await updatePayment(selectedPayment.id, data);
       if (resp.statusCode === 200) {
         await allPayment({ ...paginationPayment });
-        showToast("SPP updated successfully", "success");
+        showToast("SPP berhasil diupdate", "success");
       }
     } else {
       const resp = await addPayment(data);
       console.log("resp", resp);
       if (resp.statusCode === 201) {
         await allPayment({ ...paginationPayment });
-        showToast("SPP added successfully", "success");
+        showToast("SPP berhasil ditambahkan", "success");
       }
     }
     setIsModalOpen(false);
@@ -71,7 +71,7 @@ const SPPPage = () => {
       await sleep(1000);
       await deletePayment(selectedPayment.id);
       setIsModalOpen(false);
-      showToast("Santri deleted successfully", "success");
+      showToast("SPP berhasil dihapus", "success");
       await allPayment({ ...paginationPayment });
     }
   };
@@ -107,7 +107,7 @@ const SPPPage = () => {
           className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
         >
           <Plus className="w-4 h-4 mr-2" />
-          Add New Payment
+          Tambah Pembayaran SPP
         </button>
       </div>
 
@@ -116,7 +116,7 @@ const SPPPage = () => {
           <Search className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
           <input
             type="text"
-            placeholder="Search by student ID..."
+            placeholder="Cari berdasarkan ID Santri..."
             //className="pl-10 w-full p-2 border <boltAction type="file" filePath="src/pages/SPP.tsx">
             className="pl-10 w-full p-2 border rounded-md"
             value={searchTerm}
@@ -129,22 +129,22 @@ const SPPPage = () => {
             <thead>
               <tr className="bg-gray-50">
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date
+                  Tanggal
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Santri Name
+                  Nama Santri
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Amount
+                  Jumlah
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Type
+                  Tipe
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
+                  Aksi
                 </th>
               </tr>
             </thead>
@@ -249,16 +249,16 @@ const SPPPage = () => {
                     NIS
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Name
+                    Nama Lengkap
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Class
+                    Kelas
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
+                    Aksi
                   </th>
                 </tr>
               </thead>

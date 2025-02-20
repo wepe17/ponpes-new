@@ -43,7 +43,7 @@ const PengurusPage = () => {
       console.log("resp halo", resp);
       if (resp.statusCode === 200) {
         await allUsers({ ...pagination });
-        showToast("User updated successfully", "success");
+        showToast("Pengurus berhasil diupdate", "success");
       } else if (resp.statusCode === 401) {
         showToast("Unauthorized access", "error");
       } else {
@@ -54,7 +54,7 @@ const PengurusPage = () => {
       console.log("resp", resp);
       if (resp.statusCode === 201) {
         await allUsers({ ...pagination });
-        showToast("User added successfully", "success");
+        showToast("Pengurus berhasil ditambahkan", "success");
         setIsModalOpen(false);
       } else if (resp.statusCode === 401) {
         showToast("Unauthorized access", "error");
@@ -75,7 +75,7 @@ const PengurusPage = () => {
       await sleep(1000);
       await deleteUser(selectedUser.id);
       setIsModalOpen(false);
-      showToast("Santri deleted successfully", "success");
+      showToast("Pengurus berhasil dihapus", "success");
       await allUsers({ ...pagination });
     }
   };
@@ -104,7 +104,7 @@ const PengurusPage = () => {
             className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
           >
             <Plus className="w-4 h-4 mr-2" />
-            Add New Pengurus
+            Tambah Pengurus Baru
           </button>
           <button
             onClick={exportExcel}
@@ -120,7 +120,7 @@ const PengurusPage = () => {
           <Search className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
           <input
             type="text"
-            placeholder="Search by name or username..."
+            placeholder="Cari berdasarkan Pengurus..."
             className="pl-10 w-full p-2 border rounded-md"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -211,7 +211,7 @@ const PengurusPage = () => {
 
         {entry === "delete" && (
           <div className="">
-            Are you sure you want to delete user <b>{selectedUser?.name}</b> ?{" "}
+            Apakah kamu yakin menghapus data pengurus <b>{selectedUser?.name}</b> ?{" "}
           </div>
         )}
       </Modal>

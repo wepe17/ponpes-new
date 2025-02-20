@@ -23,7 +23,7 @@ const Login = () => {
       await login(data.username, data.password);
       navigate("/santri");
     } catch (error) {
-      alert("Login failed. Please check your credentials.");
+      alert("Login gagal. Silahkan cek Username / Password");
     }
   };
 
@@ -78,7 +78,7 @@ const Login = () => {
           </button>
         </form>
         <div className="text-center mt-4">
-          don't have an account?{" "}
+          belum punya akun?{" "}
           <Link to="/registration" className="text-green-600">
             Register
           </Link>

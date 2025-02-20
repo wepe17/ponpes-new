@@ -51,14 +51,14 @@ const SantriPage = () => {
       const resp = await updateSantri(selectedSantri.id, data);
       if (resp.statusCode === 200) {
         await allSantri({ ...pagination });
-        showToast("Santri updated successfully", "success");
+        showToast("Santri berhasil diupdate", "success");
       }
     } else {
       const resp = await addSantri(data);
       console.log("resp", resp);
       if (resp.statusCode === 201) {
         await allSantri({ ...pagination });
-        showToast("Santri added successfully", "success");
+        showToast("Santri berhasil ditambahkan", "success");
       }
     }
 
@@ -76,7 +76,7 @@ const SantriPage = () => {
       await sleep(1000);
       await deleteSantri(selectedSantri.id);
       setIsModalOpen(false);
-      showToast("Santri deleted successfully", "success");
+      showToast("Santri berhasil dihapus", "success");
       await allSantri({ ...pagination });
     }
   };
@@ -106,7 +106,7 @@ const SantriPage = () => {
             className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
           >
             <Plus className="w-4 h-4 mr-2" />
-            Add New Santri
+            Tambah Santri Baru
           </button>
           <button
             onClick={exportExcel}
@@ -137,16 +137,16 @@ const SantriPage = () => {
                   NIS
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Name
+                  Nama Lengkap
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Class
+                  Kelas
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
+                  Aksi
                 </th>
               </tr>
             </thead>
@@ -214,7 +214,7 @@ const SantriPage = () => {
         )}
         {entry === "delete" && (
           <div className="">
-            Are you sure you want to delete santri <b>{selectedSantri?.name}</b>{" "}
+            Apakah kamu yakin menghapus data santri <b>{selectedSantri?.name}</b>{" "}
             ?{" "}
           </div>
         )}

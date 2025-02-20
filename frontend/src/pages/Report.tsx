@@ -56,13 +56,13 @@ const ReportPage = () => {
             <thead>
               <tr className="bg-gray-50">
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  KAS Amount
+                  Jumlah KAS
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  KAS Date
+                  Tanggal KAS
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  KAS Description
+                  Deskripsi KAS
                 </th>
               </tr>
             </thead>

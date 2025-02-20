@@ -67,14 +67,14 @@ const KeuanganPage = () => {
       const resp = await updateTransaction(selectedTransaction.id, data);
       if (resp.statusCode === 200) {
         await allTransaction({ ...pagination });
-        showToast("Transaction updated successfully", "success");
+        showToast("Transaksi berhasil diupdate", "success");
       }
     } else {
       const resp = await addTransaction(data);
       console.log("resp", resp);
       if (resp.statusCode === 201) {
         await allTransaction({ ...pagination });
-        showToast("Transaction added successfully", "success");
+        showToast("Transaksi berhasil ditambahkan", "success");
       }
     }
 
@@ -117,7 +117,7 @@ const KeuanganPage = () => {
       await sleep(100);
       await deleteTransaction(selectedTransaction.id);
       setIsModalOpen(false);
-      showToast("Transaction deleted successfully", "success");
+      showToast("Transaksi berhasil dihapus", "success");
       await allTransaction({ ...pagination });
       await allSetting({});
     }
@@ -167,14 +167,14 @@ const KeuanganPage = () => {
             className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
           >
             <Plus className="w-4 h-4 mr-2" />
-            Add KAS
+            Tambahkan KAS
           </button>
           <button
             onClick={handleAdd}
             className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
           >
             <Plus className="w-4 h-4 mr-2" />
-            Add Transaction
+            Tambahkan Transaksi
           </button>
         </div>
       </div>
@@ -199,7 +199,7 @@ const KeuanganPage = () => {
               <TrendingUp className="w-8 h-8 text-green-500 mr-4" />
               <div>
                 <h3 className="text-sm font-medium text-gray-500">
-                  Total Income
+                  Total Pendapatan
                 </h3>
                 <p className="text-2xl font-bold text-green-600">
                   {formattedIncome}
@@ -212,7 +212,7 @@ const KeuanganPage = () => {
               <TrendingDown className="w-8 h-8 text-red-500 mr-4" />
               <div>
                 <h3 className="text-sm font-medium text-gray-500">
-                  Total Expense
+                  Total Pengeluaran
                 </h3>
                 <p className="text-2xl font-bold text-red-600">
                   {formattedExpense}
@@ -240,22 +240,22 @@ const KeuanganPage = () => {
             <thead>
               <tr className="bg-gray-50">
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date
+                  Tanggal
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Type
+                  Tipe Transaksi
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Category
+                  Kategori
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Amount
+                  Jumlah
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Description
+                  Deskripsi
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
+                  Aksi
                 </th>
               </tr>
             </thead>
@@ -324,12 +324,12 @@ const KeuanganPage = () => {
       <Modal
         isOpen={isModalKasOpen}
         onClose={() => setIsModalKasOpen(false)}
-        title="Add New KAS"
+        title="Tambah KAS baru"
         isFooter={true}
         onOk={onUpdateKas}
       >
         <label className="block text-sm font-medium text-gray-700">
-          Amount
+          Jumlah
         </label>
         <input
           type="text"
@@ -341,7 +341,7 @@ const KeuanganPage = () => {
           }
           onChange={(e) => handleInputChange(e, "kas_amount")}
         />
-        <label className="block text-sm font-medium text-gray-700">Date</label>
+        <label className="block text-sm font-medium text-gray-700">Tanggal</label>
         <input
           type="date"
           className="mt-1 block w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
@@ -351,7 +351,7 @@ const KeuanganPage = () => {
           }
         />
         <label className="block text-sm font-medium text-gray-700">
-          Description
+          Deskripsi
         </label>
         <textarea
           rows={4}
@@ -382,7 +382,7 @@ const KeuanganPage = () => {
         )}
         {entry === "delete" && (
           <div className="">
-            Are you sure you want to delete transaction{" "}
+            Apakah kamu yakin menghapus transaksi {" "}
             <b>{selectedTransaction?.amount}</b> ?{" "}
           </div>
         )}

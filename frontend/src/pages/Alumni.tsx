@@ -46,14 +46,14 @@ const AlumniPage = () => {
       const resp = await updateAlumni(selectedAlumni.id, data);
       if (resp.statusCode === 200) {
         await allAlumni({ ...pagination });
-        showToast("Alumni updated successfully", "success");
+        showToast("Alumni berhasil diupdate", "success");
       }
     } else {
       const resp = await addAlumni(data);
       console.log("resp", resp);
       if (resp.statusCode === 201) {
         await allAlumni({ ...pagination });
-        showToast("Alumni added successfully", "success");
+        showToast("Alumni berhasil ditambahkan", "success");
       }
     }
 
@@ -71,7 +71,7 @@ const AlumniPage = () => {
       await sleep(1000);
       await deleteAlumni(selectedAlumni.id);
       setIsModalOpen(false);
-      showToast("Alumni deleted successfully", "success");
+      showToast("Alumni berhasil dihapus", "success");
       await allAlumni({ ...pagination });
     }
   };
@@ -90,7 +90,7 @@ const AlumniPage = () => {
           className="bg-green-600 text-white px-4 py-2 rounded-md flex items-center"
         >
           <Plus className="w-4 h-4 mr-2" />
-          Add New Alumni
+          Tambah Alumni Baru
         </button>
       </div>
 
@@ -114,13 +114,13 @@ const AlumniPage = () => {
                   NIS
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Name
+                  Nama Lengkap
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Graduation Year
+                  Lulus Tahun
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Occupation
+                  Pekerjaan Saat Ini
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
@@ -185,7 +185,7 @@ const AlumniPage = () => {
         )}
         {entry === "delete" && (
           <div className="">
-            Are you sure you want to delete santri <b>{selectedAlumni?.name}</b>{" "}
+            Apakah kamu yakin hapus santri <b>{selectedAlumni?.name}</b>{" "}
             ?{" "}
           </div>
         )}
