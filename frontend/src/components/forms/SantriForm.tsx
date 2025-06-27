@@ -130,8 +130,8 @@ const SantriForm: React.FC<SantriFormProps> = ({ onSubmit, initialData }) => {
             {...register("status")}
             className="w-full border h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
           >
-            <option value="active">Aktif</option>
-            <option value="inactive">Tidak Aktif</option>
+            <option value="aktif">Aktif</option>
+            <option value="tidak aktif">Tidak Aktif</option>
           </select>
         </FormField>
       </div>
@@ -149,4 +149,3 @@ const SantriForm: React.FC<SantriFormProps> = ({ onSubmit, initialData }) => {
 };
 
 export default SantriForm;
-
