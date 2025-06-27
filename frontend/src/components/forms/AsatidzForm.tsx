@@ -11,7 +11,7 @@ const schema = z.object({
   phone_number: z.string().min(1, "Nomor Telpon harus diisi"),
   address: z.string().min(1, "Alamat harus diisi"),
   join_date: z.string().min(1, "Tanggal Bergabung harus diidi"),
-  status: z.enum(["aktif", "tidak aktif"]),
+  status: z.enum(["active", "inactive"]),
 });
 
 type FormData = z.infer<typeof schema>;

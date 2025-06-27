@@ -8,8 +8,8 @@ const schema = z.object({
   // santri_id: z.string().min(1, "Student ID is required"),
   amount: z.number().min(1, "Jumlah harus lebih besar dari 0"),
   date: z.string().min(1, "Tanggal harus diisi"),
-  type: z.enum(["SPP", "Pendaftaran", "Lainnya"]),
-  status: z.enum(["sudah bayar", "pending"]),
+  type: z.enum(["SPP", "Registration", "Other"]),
+  status: z.enum(["paid", "pending"]),
   description: z.string().optional(),
 });
 

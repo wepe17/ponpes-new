@@ -13,7 +13,7 @@ const schema = z.object({
   phone_number: z.string().min(1, "Nomor Telepon harus diisi"),
   enrollment_date: z.string().min(1, "Tanggal Pendaftaran harus diisi"),
   class: z.string().min(1, "Kelas harus diisi"),
-  status: z.enum(["aktif", "tidak aktif"]),
+  status: z.enum(["active", "inactive"]),
 });
 
 type FormData = z.infer<typeof schema>;
