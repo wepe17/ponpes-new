@@ -7,7 +7,7 @@ import { Transaction } from "../../types";
 const schema = z.object({
   date: z.string().min(1, "Tanggal harus diisi"),
   amount: z.number().min(1, "Jumlah harus lebih besar dari 0"),
-  type: z.enum(["pendapatan", "pengeluaran"]),
+  type: z.enum(["income", "expense"]),
   category: z.string().min(1, "Kategori harus diisi"),
   description: z.string().min(1, "Deskripsi harus diisi"),
 });
