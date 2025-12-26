@@ -18,16 +18,19 @@ import Pagination from "../components/Pagination";
 import { formatToIDR, sleep } from "../utils";
 import { useSettingStore } from "../store/setting";
 import { exportToExcel } from "../config/excel";
+import { all } from "axios";
 
 type KasPayload = Pick<Settings, "kas_amount" | "kas_date" | "kas_description">;
 
 const KeuanganPage = () => {
   const {
     transaction,
+    allTrxData,
     addTransaction,
     updateTransaction,
     deleteTransaction,
     allTransaction,
+    fetchTransactionAll,
     pagination,
   } = useTransactionStore();
   const { updateKasSetting, allSetting, setting } = useSettingStore();
@@ -87,7 +90,7 @@ const KeuanganPage = () => {
       t?.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       t?.category.toLowerCase().includes(searchTerm.toLowerCase()),
   );
-  const { totalIncome, totalExpense } = (transaction || []).reduce(
+  const { totalIncome, totalExpense } = (allTrxData || []).reduce(
     (totals, t) => {
       if (t.type === "income") {
         totals.totalIncome += Number(t.amount);
@@ -141,6 +144,7 @@ const KeuanganPage = () => {
   useEffect(() => {
     allTransaction({});
     allSetting({});
+    fetchTransactionAll();
   }, [allTransaction, allSetting]);
 
   useEffect(() => {
@@ -341,7 +345,9 @@ const KeuanganPage = () => {
           }
           onChange={(e) => handleInputChange(e, "kas_amount")}
         />
-        <label className="block text-sm font-medium text-gray-700">Tanggal</label>
+        <label className="block text-sm font-medium text-gray-700">
+          Tanggal
+        </label>
         <input
           type="date"
           className="mt-1 block w-full h-10 p-2 border rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200"
@@ -382,7 +388,7 @@ const KeuanganPage = () => {
         )}
         {entry === "delete" && (
           <div className="">
-            Apakah kamu yakin menghapus transaksi {" "}
+            Apakah kamu yakin menghapus transaksi{" "}
             <b>{selectedTransaction?.amount}</b> ?{" "}
           </div>
         )}

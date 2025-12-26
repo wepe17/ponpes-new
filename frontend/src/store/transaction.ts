@@ -4,6 +4,7 @@ import apiClient from "../config/axios";
 
 interface TransactionState {
   transaction: Array<any>;
+  allTrxData: Array<any>;
   pagination: {
     total: number;
     currentPage: number;
@@ -21,6 +22,7 @@ interface TransactionState {
     data: Omit<Transaction, "id">,
   ) => Promise<{ statusCode: number }>;
   deleteTransaction: (id: string) => Promise<void>;
+  fetchTransactionAll: () => Promise<void>;
 }
 
 export const useTransactionStore = create<TransactionState>((set) => ({
@@ -30,9 +32,30 @@ export const useTransactionStore = create<TransactionState>((set) => ({
     totalPages: 0,
   },
   transaction: [],
+  allTrxData: [],
   loading: false,
   success: false,
   error: null,
+  fetchTransactionAll: async () => {
+    set({ loading: true });
+    try {
+      // const { page = 1, limit = 10, search = "" } = params || {};
+      const resp = await apiClient.get("/api/transactions", {
+        params: { limit: 10000 },
+      });
+      if (resp.status === 200) {
+        const { data } = resp.data;
+        set({
+          allTrxData: data,
+        });
+      } else {
+        set({ loading: false, success: false });
+      }
+    } catch (error) {
+      set({ loading: false, success: false });
+      console.error(error);
+    }
+  },
   allTransaction: async (params: any) => {
     set({ loading: true });
     try {
